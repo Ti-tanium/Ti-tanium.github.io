@@ -388,12 +388,14 @@
       
         
           
-            <h1 id="线性二次调节器LQR"><a href="#线性二次调节器LQR" class="headerlink" title="线性二次调节器LQR"></a>线性二次调节器LQR</h1><p><strong>线性二次调节器</strong>（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：<strong>横向误差</strong>、<strong>横向误差变化率</strong>、<strong>朝向误差</strong>和<strong>朝向误差变化率</strong>，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：<strong>转向</strong>、<strong>加速</strong>和<strong>制动</strong>,这个三个控制输入集合称为U。</p>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+<h1 id="线性二次调节器LQR"><a href="#线性二次调节器LQR" class="headerlink" title="线性二次调节器LQR"></a>线性二次调节器LQR</h1><p><strong>线性二次调节器</strong>（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：<strong>横向误差</strong>、<strong>横向误差变化率</strong>、<strong>朝向误差</strong>和<strong>朝向误差变化率</strong>，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：<strong>转向</strong>、<strong>加速</strong>和<strong>制动</strong>,这个三个控制输入集合称为U。</p>
 <p><img src="/images/LQR-1.png" alt="LQR-X-U"></p>
-<p>x和u与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。</p>
-<p><img src="/images/LQR-2.png" alt="LQR-2"></p>
+<p>x和u与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。<br>$$<br>w_1cte^2+w_2\dot{cte}^2+w_3\theta^2+w_4\dot{\theta}^2+w_5<em>steering^2+w_6</em>throttle^2+w_7*brake^2<br>$$</p>
 <p>最优的u应该最小化二次项的和随时间的积分。</p>
-<p><img src="/images/LQR-3.png" alt="LQR-3"></p>
+<p>$$<br>cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt<br>$$</p>
 <p>Q和R代表x和u的权重集合。xT和uT是转置矩阵，这意味着它们几乎与x和u相同，只是重新排列以便矩阵相乘。x乘以xT，u乘以uT，实质上是将每个矩阵乘以它自己。<br>Q在Apollo代码中对应<code>modules/control/conf/scout_conf.pb.txt</code>文件下的下面配置参数</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix_q: 0.001</span><br><span class="line">matrix_q: 0.0</span><br><span class="line">matrix_q: 0.01</span><br><span class="line">matrix_q: 0.0</span><br></pre></td></tr></table></figure>
 
@@ -401,7 +403,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r: 0.00001</span><br></pre></td></tr></table></figure>
 
 <p>循迹过程中可以修改以上参数以使得小车更加稳定地进行循迹。</p>
-<p>在LQR中，控制方法被描述为u=-Kx。其中，K代表一个复杂的skeme，代表如何从x计算出u。所以找到一个最优的u就是找到一个最优的K。<br><img src="/images/LQR-4.png" alt="LQR-4"></p>
+<p>在LQR中，控制方法被描述为$u=-Kx$。其中，K代表一个复杂的skeme，代表如何从x计算出u。所以找到一个最优的u就是找到一个最优的K。</p>
 <h1 id="循迹操作流程"><a href="#循迹操作流程" class="headerlink" title="循迹操作流程"></a>循迹操作流程</h1><ol>
 <li><p>将操作者电脑连接至开发套件（小车）的无线网络中（小车自带一个路由）</p>
 </li>
@@ -2242,7 +2244,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip --no-cache-dir install xxx</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>方案二 使用Swap File<br>启动swap文件，swap文件在硬盘上开辟一段空间，作为虚拟内存。操作系统会把使用频率低的内容，暂时存放到swap文件内，需要使用时再调用到内存中。<br>启动方法，在任意目录下执行以下命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建一个512 MB大小的swap文件，大小根据你的需要设置</span><br><span class="line">dd if=/dev/zero of=/swapfile bs=1024 count=524288</span><br><span class="line">chown root:root /swapfile</span><br><span class="line">chmod 0600 /swapfile</span><br><span class="line">mkswap /swapfile</span><br><span class="line">swapon /swapfile</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建一个512 MB大小的swap文件，大小根据你的需要设置</span></span><br><span class="line">dd if=/dev/zero of=/swapfile bs=1024 count=524288</span><br><span class="line">chown root:root /swapfile</span><br><span class="line">chmod 0600 /swapfile</span><br><span class="line">mkswap /swapfile</span><br><span class="line">swapon /swapfile</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
@@ -2579,7 +2581,7 @@
 
 <p>配置文件默认会放置在Writing default config to:/root/.jupyter/jupyter_notebook_config.py</p>
 <h2 id="生成密钥"><a href="#生成密钥" class="headerlink" title="生成密钥"></a>生成密钥</h2><p> 命令行输入ipython。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ipython</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ipython</span></span><br></pre></td></tr></table></figure>
 
 <p>import passwd包，使用改包生成密钥</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In[<span class="number">1</span>]: <span class="keyword">from</span> notebook.auth <span class="keyword">import</span> passwd</span><br><span class="line">In[<span class="number">2</span>]: passwd()</span><br><span class="line">Enter password: </span><br><span class="line">Verify password: </span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'sha1:0000000000000000000000000000000000000000000000000'</span></span><br></pre></td></tr></table></figure>

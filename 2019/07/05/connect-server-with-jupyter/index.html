@@ -394,7 +394,7 @@
 
 <p>配置文件默认会放置在Writing default config to:/root/.jupyter/jupyter_notebook_config.py</p>
 <h2 id="生成密钥"><a href="#生成密钥" class="headerlink" title="生成密钥"></a>生成密钥</h2><p> 命令行输入ipython。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> ipython</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ipython</span></span><br></pre></td></tr></table></figure>
 
 <p>import passwd包，使用改包生成密钥</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In[<span class="number">1</span>]: <span class="keyword">from</span> notebook.auth <span class="keyword">import</span> passwd</span><br><span class="line">In[<span class="number">2</span>]: passwd()</span><br><span class="line">Enter password: </span><br><span class="line">Verify password: </span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'sha1:0000000000000000000000000000000000000000000000000'</span></span><br></pre></td></tr></table></figure>
