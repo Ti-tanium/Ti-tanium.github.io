@@ -1,3 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
+  <entry>
+    <title><![CDATA[Apollo自动驾驶平台：循迹]]></title>
+    <url>%2F2019%2F07%2F23%2FApollo%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0%EF%BC%9A%E5%BE%AA%E8%BF%B9%2F</url>
+    <content type="text"><![CDATA[线性二次调节器LQR线性二次调节器（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：横向误差、横向误差变化率、朝向误差和朝向误差变化率，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：转向、加速和制动,这个三个控制输入集合称为U。 x和u与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。 w_1cte^2+w_2\dot{cte}^2+w_3\theta^2+w_4\dot{\theta}^2+w_5*steering^2+w_6*throttle^2+w_7*brake^2最优的u应该最小化二次项的和随时间的积分。 cost=\int_{0}^{\infty}(x^TQx+u^TRu)dtQ和R代表x和u的权重集合。xT和uT是转置矩阵，这意味着它们几乎与x和u相同，只是重新排列以便矩阵相乘。x乘以xT，u乘以uT，实质上是将每个矩阵乘以它自己。Q在Apollo代码中对应modules/control/conf/scout_conf.pb.txt文件下的下面配置参数1234matrix_q: 0.001matrix_q: 0.0matrix_q: 0.01matrix_q: 0.0 R则对应1r: 0.00001 循迹过程中可以修改以上参数以使得小车更加稳定地进行循迹。 在LQR中，控制方法被描述为$u=-Kx$。其中，K代表一个复杂的skeme，代表如何从x计算出u。所以找到一个最优的u就是找到一个最优的K。 循迹操作流程 将操作者电脑连接至开发套件（小车）的无线网络中（小车自带一个路由） 操作电脑使用ssh远程登录至小车，若是直接在小车的系统上进行操作可以免去步骤1和2. 进入到apollo代码的根目录下，启用docker环境, 并进入docker环境 12bash docker/scripts/dev_start.shbash docker/scripts/dev_into.sh 启动DreamView，执行bootstrap.sh脚本 1bash scripts/bootstrap.sh 在浏览器中打开DreamView，输入小车的IP地址:8888即可（若是在小车系统上，直接用localhost:8888即可访问）。 在Module Controller下打开CAN Bus、Localization、GPS、Control模块（注意Control模块最后打开） 注意： 为保证可以接受到GPS信号，尽量在开阔处进行测试。 若有修改参数，无需重新编译代码，直接将对应的模块重新打开一下即可。 注意观察Task菜单下的Module Delay，若出现红色的延时，重新打开一下对应的模块。 将小车停至合适的位置（想要循迹的初始位置），操作者将Module Controller下的data recorder（录制运行时的数据）和RTK recorder（录制轨迹）打开后，就可以开始使用遥控器操控小车行驶来录制轨迹数据了。 录制完毕后，将data recorder、RTK recorder模块关闭，将小车停至循迹的初始点，打开Module Controller下的Player，用遥控器将小车切入自动驾驶模式。然后在DreamView下的Task菜单下点击Start Auto，小车便可以开始自动循迹。 注意：循迹期间需密切关注小车的行驶情况，遇险时应立即使用遥控接管或拍下小车后面的急停按钮。]]></content>
+      <categories>
+        <category>Autonomous Driving</category>
+      </categories>
+      <tags>
+        <tag>Autonomous Driving</tag>
+        <tag>Buido Apollo</tag>
+        <tag>Tracking</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Apollo自动驾驶平台：工控机软件系统安装教程]]></title>
+    <url>%2F2019%2F07%2F22%2FApollo%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0%EF%BC%9A%E5%B7%A5%E6%8E%A7%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[简介此系列博客将记录如何使用百度Apollo自动驾驶开发者套件完成循迹功能。循迹指的是让车辆/机器人自己照着原来设定的路线行驶，因此首先要进行录制路线Record，然后再进行循迹Replay，以及完成简单的避障功能。 Apollo的开发者套件，也就是一辆小车，如下图所示, 拥有一个激光雷达，两个GPS天线，一个IMU，一个毫米波雷达，3个摄像头用于感知环境，小车同时配备一个遥控器用于控制小车，小车有两种模式：遥控模式和自动驾驶模式。 工控机软件系统安装Ubantu系统安装由于Apollo平台的代码均基于Linux，因此需要安装一个Linux系统，此处推荐Ubantu，官方用的也是Ubantu系统，官方教程推荐的是Ubantu14.04.3系统，但此系统较老旧，可能出现一些奇怪的问题（比如无法上网），因此还是推荐使用Ubantu16.04. 下面部分是Ubantu双系统的安装，使用虚拟机的话需要保证配置，不然跑不起来代码，至少需要给Ubantu系统分配70G的存储空间，据说两核至少需要8小时才可以编译Apollo平台。 软件准备 Ubantu16.04 引导盘制作软件链接: https://pan.baidu.com/s/12KEntHWK8RZ1wSnVE6Aatw 提取码: 7vvb 步骤 引导盘制作可以参考教程. 磁盘分区 在“我的电脑”上右键单击，点“管理”。 进入下面界面后，点“存储-&gt;磁盘管理”。 选择一个空间足够(&gt;=70G,最好100G)的非系统盘，右键单击，选择压缩卷。 在查询完可用压缩空间后，会弹出下列对话框，输入想要压缩的空间,然后点击确认即分区完成（压缩的空间也就是预留给Ubantu的存储空间） Ubantu安装 将启动盘插入电脑 重启电脑，并尝试进入BIOS系统，进入方式不同电脑不一样，通常进入方式为F12/F2/DEL/Enter这几个键，可以多重启几次几个键都试试。重启后疯狂敲这些键就好啦。 进入后，选择USB启动，然后选择Ubantu即可进入Ubantu系统的安装向导。 然后照着向导依次选择语言、时区等等就OK啦。 注意：Ubantu安装时，会要求填用户名和密码，这个密码一定要牢记，后面获取root权限需要该密码。 Docker安装只需在Ubantu里运行Apollo提供的脚本即可，脚本链接 Apollo源代码编译首先获取Apollo源代码，约1G左右，下载时间较长，耐心等待。 1git clone https://github.com/ApolloAuto/apollo.git 下载完后，cd进入代码的根目录下，依次执行以下脚本，执行时间较长。 123bash docker/scripts/dev_start.shbash docker/scripts/dev_into.shbash apollo.sh build 编译完成后，执行下面命令打开DreamView交互平台。 1bash scripts/bootstrap.sh 启动成功的提示信息： 1234Start roscore...Launched module monitor.Launched module dreamview.Dreamview is running at http://localhost:8888 在浏览器上访问http://localhost:8888，即可打开DreamView。DreamView界面如下所示： 到此环境就配置完毕, 下一个教程介绍如何使用DreamView完成循迹 参考Apollo开源代码git仓库的官方教程。]]></content>
+      <categories>
+        <category>Autonomous Driving</category>
+      </categories>
+      <tags>
+        <tag>Environment Setup</tag>
+        <tag>Autonomous Driving</tag>
+        <tag>Baidu Apollo</tag>
+        <tag>Multiple Operating System</tag>
+        <tag>Ubantu</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[HTTP 强缓存vs弱缓存]]></title>
+    <url>%2F2019%2F07%2F22%2F%E5%BC%BA%E7%BC%93%E5%AD%98vs%E5%BC%B1%E7%BC%93%E5%AD%98%2F</url>
+    <content type="text"><![CDATA[HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存） 流程访问静态资源时的流程 强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。则浏览器继续使用该资源。 缓存失败阶段：若在本地没有找到对应资源，或者资源已过期/更新，则服务器返回该资源。 强缓存VS弱缓存 状态码 强缓存返回200弱缓存返回304 强缓存不需要发出http请求，而弱缓存需要。 强缓存使用Expires和cache-control来控制。优先级：pragma&gt;cache-control&gt;Expires Expires 服务器为资源设置一个Expire日期，在这Expire日期之前可以将资源视作最新。此字段是为了兼容旧版本HTTP才保留的，在http1.0时配合pragma使用，pragma：no-cache表示不缓存，pragma的优先级大于Expires Cache-Control Cache-Control是http1.1为了弥补Expires的缺陷而加入的（http1.0时，使用pragma），当Expires和Cache-Control同时存在时，Cache-Control的优先级高于Expires。 |选项|描述| |—-|—-| |public|服务器端和浏览器端都可以缓存| |private|只有浏览器可以缓存| |no-cache|强制浏览器在使用cache拷贝之前先提交一个http请求到原服务器进行确认，类似于弱缓存 |only-if-cached|表明客户端只接受已缓存的响应，并且不需要向服务器检查是否有更新的拷贝 |max-age=60|单位：秒，缓存的有效期，超过这个时间后将被认为过期。此选项会覆盖Expires字段的过期日期 |no-store|不缓存，使用协商缓存 |must-revalidate|缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源 弱缓存有关字段 Last-Modified/If-Modified-Since（HTTP1.0）、Etag/If-None-Match（HTTP1.1） Last-Modified和Etag为响应头部字段，分别对应请求头部字段中的if-Modifed-Since/If-None-Match。 Last-Modified/If-Modified-Since存在缺陷，当资源的实际内容没有改变而仅仅只是时间变化了（比如只是打开了文件，并保存了一下，尽管内容没有变化但还是修改过），还是需要重新请求资源。因此为了解决这个缺陷，http1.1提出了Etag/If-None-Match，Etag类似于文件的hash，为文件提供了一个指纹，只检查文件内容是否一致。 流程： 当没有命中强缓存时，进入弱缓存阶段 浏览器首次访问网站时，服务器会在响应头部中附上Last-Modified/Etag 弱缓存阶段，浏览器再次访问时，会发送If-Modified-Since/If-None-Match去询问是否有改变，有则重新获取，否则使用本地缓存。 缓存与浏览器刷新 F5刷新，会使强缓存失效，浏览器进行协商缓存。 Ctrl+F5刷新，为强制刷新，强缓存与弱缓存均失效，浏览器总会发送HTTP请求向服务器获取最新数据。]]></content>
+      <categories>
+        <category>Computer Network</category>
+        <category>HTTP</category>
+      </categories>
+      <tags>
+        <tag>Computer Network</tag>
+        <tag>HTTP</tag>
+        <tag>Cache</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CSS：清除浮动的方法]]></title>
+    <url>%2F2019%2F07%2F14%2FCSS%EF%BC%9A%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[CSS 浮动 浮动的框可以向左或向右移动，直到它的外边缘碰到包含框或另一个浮动框的边框为止。 浮动属性的本意是：让文字像流水一样环绕浮动元素 特点包裹性对于父元素而言，通常宽度默认为100%，高度适应内容，而对父元素使用float之后，父元素的宽度也会自适应内容，将内容包裹起来。 对应的代码如下12345678910111213141516171819202122&lt;!DOCTYPE html&gt;&lt;html&gt; &lt;head&gt; &lt;style type="text/css"&gt; .div1 &#123; background:#000080; border:1px solid red; float: left; &#125; .left &#123; width:200px; height:200px; background:#DDD; &#125; &lt;/style&gt; &lt;/head&gt; &lt;body&gt; &lt;div class="div1"&gt; &lt;div class="left"&gt;Left&lt;/div&gt; &lt;/div&gt; &lt;/body&gt;&lt;/html&gt; 高度塌陷使用float属性之后，浮动元素脱离文档的普通流，他的父级元素无法获得浮动元素的高度，因而错误的认为里面没有元素，因而出现高度塌陷问题。 对应代码如下12345678910111213141516171819202122&lt;!DOCTYPE html&gt;&lt;html&gt; &lt;head&gt; &lt;style type="text/css"&gt; .div1 &#123; background:#000080; border:1px solid red; &#125; .left &#123; width:200px; height:200px; background:#DDD; float:left; &#125; &lt;/style&gt; &lt;/head&gt; &lt;body&gt; &lt;div class="div1"&gt; &lt;div class="left"&gt;Left&lt;/div&gt; &lt;/div&gt; &lt;/body&gt;&lt;/html&gt; 清除浮动为了避免高度塌陷的问题，可以通过多种方式清除浮动 一、父元素固定height既然是父元素高度塌陷，那么最简单直接的方式是将父元素的高度固定下来。但这种方式缺乏灵活性，适合固定高度的布局。 二、空标签+clear:both在父级元素里面添加一个空的div标签，并设置div标签的clear属性为both。该方法的浏览器支持性较好，但是当浮动布局元素较多时，需要很多空div标签，因此不推荐使用。代码：123456789101112131415161718192021222324&lt;!DOCTYPE html&gt;&lt;html&gt; &lt;head&gt; &lt;style type="text/css"&gt; .div1 &#123; background:#000080; border:1px solid red; &#125; .left &#123; width:200px; height:200px; background:#DDD; float:left; &#125; .clearfloat&#123;clear:both&#125; /* new */ &lt;/style&gt; &lt;/head&gt; &lt;body&gt; &lt;div class="div1"&gt; &lt;div class="left"&gt;Left&lt;/div&gt; &lt;/div&gt; &lt;div class="clearfloat"&gt;&lt;/div&gt; &lt;!--new--&gt; &lt;/body&gt;&lt;/html&gt; 效果： 三、父级元素添加overflow直接为父级元素添加属性overflow，设置值为hidden或auto即可。 hidden：缺点是无法和position一起使用，超出的部分会被隐藏掉。 auto: 缺点是当子元素高度大于父元素时，会出现滚动条。 四、定义伪类 兼容性：IE8以上才支持after 目前主流采用此方法，浏览器兼容较好，推荐使用此方法解决浮动问题。 12345678910111213141516171819202122232425262728293031&lt;!DOCTYPE html&gt;&lt;html&gt; &lt;head&gt; &lt;style type="text/css"&gt; .div1 &#123; background:#000080; border:1px solid red; &#125; .left &#123; width:200px; height:200px; background:#DDD; float:left; &#125; /* solution */ .clearfloat:after&#123; display:block; clear:both; content:""; visibility:hidden; height:0 &#125; .clearfloat&#123;zoom:1&#125; &lt;/style&gt; &lt;/head&gt; &lt;body&gt; &lt;div class="div1 clearfloat"&gt; &lt;div class="left"&gt;Left&lt;/div&gt; &lt;/div&gt; &lt;/body&gt;&lt;/html&gt;]]></content>
+      <categories>
+        <category>Front-end</category>
+        <category>HTML/CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+        <tag>Front-end</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[String Matching Algorithm——Sunday]]></title>
+    <url>%2F2019%2F07%2F10%2F%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94%E2%80%94Sunday%2F</url>
+    <content type="text"><![CDATA[算法比较对长为m的源串，长为n的子串进行匹配 算法 最坏时间复杂度 最优时间复杂度 暴力双循环 O(m*n) \ KMP O(m+n) \ Sunday O(m*n) O(m/n) KMP算法 核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。 可参考以下Youtube视频： 虽然懂了KMP的大概思路，但写出来的代码还是一堆bug呀，果然还是功力不够，不过还好有Sunday算法，简单易懂，速度又快！ Sunday算法Sunday算法是对BM算法（Boyer-Moore算法）的进一步优化，是现代文字处理器中常用的字符串匹配算法。 核心：尽可能的跳过较多的字符串 参数介绍： 主串S 模式串P i 为主串S的的index，j为模式串P的index。 m 指着模式串最后一位与主串对应的位置的下一位（现在不理解，可以看下面的实例）。 slen：主串S的长度 plen: 模式串P的长度 算法步骤 首先初始状况是i=j=0，i指着S的首位，j指着P的首位，m则指着S的第plen+1位，及第6位 判断S[i]与P[j]是否相等。 若相等则i++，j++，比较下一位。 若相等，且j==plen-1，也就是比较完毕了，则说明找到了目标，直接返回i-j即可。 若是不相等，则需要看S[m]字符是否在P中出现 若没出现，则直接将j指向S[m]的下一位，i指向m+1的位置，j则重新置0，m则更新为 新的i+plen。 若出现了，还是要想办法尽可能大的将P往后滑动。首先，找到模式串P中与S[m]字符相等字符的位置，然后将P串中的该字符与S[m]字符对齐。对齐时，P向右滑动了多少格，i更新的时候就加几，j则重置为0，m还是用更新后的i加plen：新i+plen。 更新后若出现m&gt;slen的情况，说明已经比较完毕，仍没有找到目标，则return -1。 实例讲解参数 S: string matching algorithm P: rithm slen: 25 plen: 5 首先将i指向S首位，j指向P首位，即i=j=0. m则指向S的第plen位，也就是第5位。 初始化 i=0, j=0, m=5， 状态如下所示 S s t r i n g m a t c h i n g a l g o r i t h m i m P r i t h m j 比较 S[0] 与 P[0]，发现不等，则直接看 S[5] 是否在P中出现，&#39;rithm&#39;里是没有&#39;g&#39;的，故直接将P移到m的下一位。 第一步更新后 i=6, j=0, m=11， 状态如下所示 S s t r i n g m a t c h i n g a l g o r i t h m i m P r i t h m j 比较S[6]与P[0]，发现&#39; &#39;不等于&#39;r&#39;，且S[11]在&#39;rithm&#39;的第3位出现。则需要将P中的&#39;h&#39;与S中的&#39;h&#39;对齐，只需要将P串向右移动两格（对应于i=m-3=8） 第二步更新后 i=8, j=0, m=13， 状态如下所示 S s t r i n g m a t c h i n g a l g o r i t h m i m P r i t h m j 同样S[8]!=P[0]，且S[13]为&#39;n&#39;不存在于&#39;rithm&#39;，因此直接将P滑到m的下一位 第三步更新后 i=14, j=0, m=19 S s t r i n g m a t c h i n g a l g o r i t h m i m P r i t h m j 再次比较, S[14]!=P[0], 且S[19]不在P中，再次将P滑到m的下一位。 第四步更新后 i=20, j=0, m=25 S s t r i n g m a t c h i n g a l g o r i t h m i m P r i t h m j 这时候可以看到，&#39;rithm&#39;是匹配上了，一步一步比较，i与j逐步加1，直至j=4时，比较完毕，得到结果i-j=24-4=20。 LeetCode 题源LeetCode 28. Implement strStr() AC 代码1234567891011121314151617181920212223242526272829303132class Solution &#123;public: int strStr(string haystack, string needle) &#123; if(needle.empty())&#123; return 0; &#125; int slen=haystack.length(); int plen=needle.length(); int i=0,j=0,k,m=plen; // i 指 haystack，j 指 needle， while(i&lt;slen)&#123; if(haystack[i]!=needle[j])&#123; for(k=plen-1;k&gt;=0;k--)&#123; if(needle[k]==haystack[m]) break; &#125; i=m-k; j=0; m=i+plen; if(m&gt;slen)&#123; return -1; &#125; &#125;else&#123; if(j==plen-1)&#123; return i-j; &#125; i++,j++; &#125; &#125; return -1; &#125;&#125;;]]></content>
+      <categories>
+        <category>Data Structure &amp; Algorithm</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+        <tag>Sunday</tag>
+        <tag>String Matching</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Javascript Prototype]]></title>
+    <url>%2F2019%2F07%2F06%2FJavascript-Prototype%2F</url>
+    <content type="text"><![CDATA[构造函数每个实例都有一个constructor属性，指向他的构造函数。每一个原型对象都有一个默认的属性constructor。每一个constructor都指向一个原型对象。 JS 原型（prototype）Javascript对象可以从原型对象继承属性，这种原型式继承(prototypal inheritance)是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建一次，创建的每个对象都可以调用原型中的方法。 每个Javascript函数都有一个prototype属性（Function.bind()除外） 每个对象有一个proto属性指向该对象constructor.prototype，但只有函数才有prototype属性 以上面Book类为例, 原型、构造函数和实例对象的关系如下图所示： 即：1234var book1=new Book("Harry Potter","J.K.Rowling");book1.__proto__===Book.prototype; // truebook1.constructor===Book //trueBook.prototype.constructor===Book // true 所有的函数对象都继承自Function.prototype,因此有：12345678910111213141516171819202122232425262728Number.__proto__ === Function.prototype // trueNumber.constructor == Function //trueBoolean.__proto__ === Function.prototype // trueBoolean.constructor == Function //trueString.__proto__ === Function.prototype // trueString.constructor == Function //true// 所有的构造器都来自于Function.prototype，甚至包括根构造器Object及Function自身Object.__proto__ === Function.prototype // trueObject.constructor == Function // true// 所有的构造器都来自于Function.prototype，甚至包括根构造器Object及Function自身Function.__proto__ === Function.prototype // trueFunction.constructor == Function //trueArray.__proto__ === Function.prototype // trueArray.constructor == Function //trueRegExp.__proto__ === Function.prototype // trueRegExp.constructor == Function //trueError.__proto__ === Function.prototype // trueError.constructor == Function //trueDate.__proto__ === Function.prototype // trueDate.constructor == Function //true 而Math与JSON以对象形式存在，所以：12345Math.__proto__ === Object.prototype // trueMath.construrctor == Object // trueJSON.__proto__ === Object.prototype // trueJSON.construrctor == Object //true 再一个例子12345678function Person()&#123;&#125;var person1 = new Person();console.log(person1.__proto__ === Person.prototype); // trueconsole.log(Person.prototype.__proto__ === Object.prototype) //trueconsole.log(Object.prototype.__proto__) //nullPerson.__proto__ == Function.prototype; //trueconsole.log(Function.prototype)// function()&#123;&#125; (空函数) 注意： 大部分prototype都是object类型，但Function.prototype是function类型。 Object.prototype.proto=null 由于Object是所有类的父类，类似于根节点，所以其prototype的proto为null。 当试图引用某对象的某属性时，首先会在该对象的内部查找是否有该属性，找不到，就会去对象的proto属性里找，接着又会在proto属性所指的对象的proto里查找，一直查到Object的Protot。 instanceof 运算符左侧为待测的实例对象，右侧为构造函数（构造函数即类名，是类的共有标识）。instanceof会检查左侧对象是否继承自右侧构造函数的prototype对象。可以不是直接继承。 参考https://www.jianshu.com/p/dee9f8b14771]]></content>
+      <categories>
+        <category>Front-end</category>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>Javascript</tag>
+        <tag>Prototype</tag>
+        <tag>Object Oriented Programming</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux:Swap File Usage]]></title>
+    <url>%2F2019%2F07%2F06%2FLinux-Swap-File-Usage%2F</url>
+    <content type="text"><![CDATA[起因最近在使用pip安装torch时，由于内存不足，导致了Memory Error。pip安装的缓存机制想要先把整个文件读取到内存以后才开始安装，因此可能导致内存不足。 解决方案 方案一 不缓存 1pip --no-cache-dir install xxx 方案二 使用Swap File启动swap文件，swap文件在硬盘上开辟一段空间，作为虚拟内存。操作系统会把使用频率低的内容，暂时存放到swap文件内，需要使用时再调用到内存中。启动方法，在任意目录下执行以下命令 123456# 创建一个512 MB大小的swap文件，大小根据你的需要设置dd if=/dev/zero of=/swapfile bs=1024 count=524288chown root:root /swapfilechmod 0600 /swapfilemkswap /swapfileswapon /swapfile 完成以上指令后，再次尝试使用pip install xxx 即可成功安装。 若出现以下错误：1dd: failed to open ‘/swapfile’: Text file busy 这是因为swapfile处于启动状态，可能正在被使用，因此需要先关掉swapfile：1swapoff /swapfile]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Swap File</tag>
+        <tag>Memory Error</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Pascal VOC 数据集格式详解]]></title>
+    <url>%2F2019%2F07%2F06%2FPascal-VOC-%E6%95%B0%E6%8D%AE%E9%9B%86%E6%A0%BC%E5%BC%8F%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[简介Pascal Voc 格式是目标检测常用的格式。Pascal Voc 数据集官网 目录结构PASCAL VOC数据集由5个部分构成：JPEGImages，Annotations，ImageSets，SegmentationClass以及SegmentationObject。 JPEGImages：存放的是训练与测试的所有图片。 Annotations：里面存放的是每张图片打完标签所对应的XML文件 ImageSets：ImageSets文件夹下本次讨论的只有Main文件夹，此文件夹中存放的主要又有四个文本文件test.txt,train.txt,trainval.txt,val.txt,其中分别存放的是测试集图片的文件名、训练集图片的文件名、训练验证集图片的文件名、验证集图片的文件名。 SegmentationClass与SegmentationObject：存放的都是图片，且都是图像分割结果图，对目标检测任务来说没有用。class segmentation 标注出每一个像素的类别 。object segmentation 标注出每一个像素属于哪一个物体 Annotation的Xml格式1234567891011121314151617181920212223242526&lt;annotation&gt; &lt;folder&gt;17&lt;/folder&gt; # 图片所处文件夹 &lt;filename&gt;77258.bmp&lt;/filename&gt; # 图片名 &lt;path&gt;~/frcnn-image/61/ADAS/image/frcnn-image/17/77258.bmp&lt;/path&gt; &lt;source&gt; #图片来源相关信息 &lt;database&gt;Unknown&lt;/database&gt; &lt;/source&gt; &lt;size&gt; #图片尺寸 &lt;width&gt;640&lt;/width&gt; &lt;height&gt;480&lt;/height&gt; &lt;depth&gt;3&lt;/depth&gt; &lt;/size&gt; &lt;segmented&gt;0&lt;/segmented&gt; #是否有分割label &lt;object&gt; 包含的物体 &lt;name&gt;car&lt;/name&gt; #物体类别 &lt;pose&gt;Unspecified&lt;/pose&gt; #物体的姿态 &lt;truncated&gt;0&lt;/truncated&gt; #物体是否被部分遮挡（&gt;15%） &lt;difficult&gt;0&lt;/difficult&gt; #是否为难以辨识的物体， 主要指要结体背景才能判断出类别的物体。虽有标注， 但一般忽略这类物体 &lt;bndbox&gt; #物体的bound box &lt;xmin&gt;2&lt;/xmin&gt; &lt;ymin&gt;156&lt;/ymin&gt; &lt;xmax&gt;111&lt;/xmax&gt; &lt;ymax&gt;259&lt;/ymax&gt; &lt;/bndbox&gt; &lt;/object&gt;&lt;/annotation&gt; LabelImg用于对图片打标签的软件，可以生成Pascal Voc格式的Xml文件。LabelImg百度云下载链接。 制作Pascal VOC格式的数据集 爬取数据集图片放置于JPEGImages文件夹下，注意文件命名（按顺序递增）。 使用LabelImg进行标注，获取对应图片的XML标注文件，放置于Annotations文件夹下。 运行如下代码生成ImageSets文件夹12345678910111213141516171819202122232425262728293031323334353637383940414243444546# -*- coding: utf-8 -*-# @Time : 2018/11/12 13:03# @Author : lazerliu# @File : xml2voc.pyimport osimport random# ==================可能需要修改的地方=====================================#g_root_path = "D:/VOCdevkit/VOC2007/" #根路径xmlfilepath = "Annotations" # 标注文件存放路径saveBasePath = "ImageSets/Main/" # ImageSets信息生成路径trainval_percent = 0.98train_percent = 0.98# ==================可能需要修改的地方=====================================#os.chdir(g_root_path)total_xml = os.listdir(xmlfilepath)num = len(total_xml)xml_list = range(num)tv = int(num * trainval_percent)tr = int(tv * train_percent)trainval = random.sample(xml_list, tv)train = random.sample(trainval, tr)print("train and val size", tv)print("train size", tr)ftrainval = open(saveBasePath + "trainval.txt", "w")ftest = open(saveBasePath + "test.txt", "w")ftrain = open(saveBasePath + "train.txt", "w")fval = open(saveBasePath + "val.txt", "w")for i in xml_list: name = total_xml[i][:-4] + "\n" if i in trainval: ftrainval.write(name) if i in train: ftrain.write(name) else: fval.write(name) else: ftest.write(name)ftrainval.close()ftrain.close()fval.close()ftest.close()]]></content>
+      <categories>
+        <category>Computer Vision</category>
+      </categories>
+      <tags>
+        <tag>Pascal VOC</tag>
+        <tag>Dataset Format</tag>
+        <tag>Computer Vision</tag>
+        <tag>Object Detection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[How to access server with Jupyter Notebook]]></title>
+    <url>%2F2019%2F07%2F05%2Fconnect-server-with-jupyter%2F</url>
+    <content type="text"><![CDATA[安装Jupyter首先登录服务器，输入jupyter notebook检查是否有安装过jupyter。若没有则通过以下指令安装：1pip install jupyter 生成Jupyter配置文件安装完Jupyter之后，输入以下指令生成jupyter配置文件：1jupyter notebook --generate-config 配置文件默认会放置在Writing default config to:/root/.jupyter/jupyter_notebook_config.py 生成密钥 命令行输入ipython。1$ ipython import passwd包，使用改包生成密钥12345In[1]: from notebook.auth import passwdIn[2]: passwd()Enter password: Verify password: Out[2]: 'sha1:0000000000000000000000000000000000000000000000000' 编辑jupyter配置文件输入以下指令，编辑配置文件1vim ~/.jupyter/jupyter_notebook_config.py 按i进入编辑模式该文件的所有配置初始时都是被注释的。需要修改以下的配置，将每一行配置前的＃去掉123456c.NotebookApp.allow_remote_access = Truec.NotebookApp.allow_root = True ## 表示是否允许jupyter使用root权限c.NotebookApp.ip = '*'c.NotebookApp.port = 8888 ##根据自己情况指定c.NotebookApp.open_browser = Falsec.NotebookApp.password = u'sha1:00000000....' ## 刚刚设置密码时生成的密钥 编辑完成后按esc退出编辑模式，输入‘:wq’退出编辑。 后台运行jupyter[后台运行参考]完成以上步骤以后，只需要在后台将jupyter运行起来就OK啦：1nohup jupyter notebook &amp; Note: 注意以上运行jupter指令所在的目录，该目录会作为访问时的根目录。 这时当前目录下会生成一个nohup.out文件，运行jupyter notebook的所有标准输出都会重定向至该文件内。可使用1jobs 查看后台作业的情况。若目录不正确可以使用kill中止掉后台进程，进入到期望的目录下后再次运行1kill %使用jobs查询到的作业代号 访问远程服务器的Jupyter在自己的浏览器上输入1服务器ip:端口号 即可进入jupyter的登录页面，如下所示接下来输入刚刚设置的密码，即可通过jupyter访问服务器啦！]]></content>
+      <categories>
+        <category>Data Science</category>
+      </categories>
+      <tags>
+        <tag>Jupyter Notebook</tag>
+        <tag>Deployment</tag>
+      </tags>
+  </entry>
 </search>
