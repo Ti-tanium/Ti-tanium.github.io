@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
-
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 
@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="构造函数每个实例都有一个constructor属性，指向他的构造函数。每一个原型对象都有一个默认的属性constructor。每一个constructor都指向一个原型对象。 JS 原型（prototype）Javascript对象可以从原型对象继承属性，这种原型式继承(prototypal inheritance)是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建">
+<meta name="description" content="构造函数 每个实例都有一个constructor属性，指向他的构造函数。 每一个原型对象都有一个默认的属性constructor。 每一个constructor都指向一个原型对象。  JS 原型（prototype） Javascript对象可以从原型对象继承属性，这种**原型式继承(prototypal inheritance)**是Javascript的核心。原型中定义的函数只在JavaSc">
 <meta name="keywords" content="Javascript,Prototype,Object Oriented Programming">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript Prototype">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/07/06/Javascript-Prototype/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="构造函数每个实例都有一个constructor属性，指向他的构造函数。每一个原型对象都有一个默认的属性constructor。每一个constructor都指向一个原型对象。 JS 原型（prototype）Javascript对象可以从原型对象继承属性，这种原型式继承(prototypal inheritance)是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建">
+<meta property="og:description" content="构造函数 每个实例都有一个constructor属性，指向他的构造函数。 每一个原型对象都有一个默认的属性constructor。 每一个constructor都指向一个原型对象。  JS 原型（prototype） Javascript对象可以从原型对象继承属性，这种**原型式继承(prototypal inheritance)**是Javascript的核心。原型中定义的函数只在JavaSc">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ti-tanium.github.io/images/constructor-prototype-instance-relation.jpg">
 <meta property="og:updated_time" content="2019-07-14T03:45:49.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript Prototype">
-<meta name="twitter:description" content="构造函数每个实例都有一个constructor属性，指向他的构造函数。每一个原型对象都有一个默认的属性constructor。每一个constructor都指向一个原型对象。 JS 原型（prototype）Javascript对象可以从原型对象继承属性，这种原型式继承(prototypal inheritance)是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建">
+<meta name="twitter:description" content="构造函数 每个实例都有一个constructor属性，指向他的构造函数。 每一个原型对象都有一个默认的属性constructor。 每一个constructor都指向一个原型对象。  JS 原型（prototype） Javascript对象可以从原型对象继承属性，这种**原型式继承(prototypal inheritance)**是Javascript的核心。原型中定义的函数只在JavaSc">
 <meta name="twitter:image" content="https://ti-tanium.github.io/images/constructor-prototype-instance-relation.jpg">
 
 
@@ -397,36 +397,38 @@
       
 
       
-        <h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>每个实例都有一个constructor属性，指向他的构造函数。<br>每一个<strong>原型对象</strong>都有一个默认的属性constructor。<br>每一个constructor都指向一个原型对象。</p>
-<h2 id="JS-原型（prototype）"><a href="#JS-原型（prototype）" class="headerlink" title="JS 原型（prototype）"></a>JS 原型（prototype）</h2><p>Javascript对象可以从原型对象继承属性，这种<strong>原型式继承(prototypal inheritance)</strong>是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建一次，创建的每个对象都可以调用原型中的方法。</p>
+        <h2 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h2>
+<p>每个实例都有一个constructor属性，指向他的构造函数。<br>
+每一个<strong>原型对象</strong>都有一个默认的属性constructor。<br>
+每一个constructor都指向一个原型对象。</p>
+<h2 id="js-原型prototype"><a class="markdownIt-Anchor" href="#js-原型prototype"></a> JS 原型（prototype）</h2>
+<p>Javascript对象可以从原型对象继承属性，这种**原型式继承(prototypal inheritance)**是Javascript的核心。原型中定义的函数只在JavaScript加载时被创建一次，创建的每个对象都可以调用原型中的方法。</p>
 <ul>
 <li>每个Javascript函数都有一个prototype属性（Function.bind()除外）</li>
-<li>每个对象有一个<strong><strong>proto</strong></strong>属性指向该对象constructor.prototype，但只有函数才有prototype属性</li>
+<li>每个对象有一个**<strong>proto</strong>**属性指向该对象constructor.prototype，但只有函数才有prototype属性</li>
 </ul>
 <p>以上面Book类为例, 原型、构造函数和实例对象的关系如下图所示：</p>
 <p><img src="/images/constructor-prototype-instance-relation.jpg" alt="constructor-prototype-instance-relation"></p>
 <p>即：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> book1=<span class="keyword">new</span> Book(<span class="string">"Harry Potter"</span>,<span class="string">"J.K.Rowling"</span>);</span><br><span class="line">book1.__proto__===Book.prototype; <span class="comment">// true</span></span><br><span class="line">book1.constructor===Book <span class="comment">//true</span></span><br><span class="line">Book.prototype.constructor===Book <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
 <p>所有的函数对象都继承自Function.prototype,因此有：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Number</span>.__proto__ === <span class="built_in">Function</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Number</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Boolean</span>.__proto__ === <span class="built_in">Function</span>.prototype <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Boolean</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>.__proto__ === <span class="built_in">Function</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">String</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有的构造器都来自于Function.prototype，甚至包括根构造器Object及Function自身</span></span><br><span class="line"><span class="built_in">Object</span>.__proto__ === <span class="built_in">Function</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Object</span>.constructor == <span class="built_in">Function</span> <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有的构造器都来自于Function.prototype，甚至包括根构造器Object及Function自身</span></span><br><span class="line"><span class="built_in">Function</span>.__proto__ === <span class="built_in">Function</span>.prototype <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Function</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Array</span>.__proto__ === <span class="built_in">Function</span>.prototype   <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Array</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">RegExp</span>.__proto__ === <span class="built_in">Function</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">RegExp</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Error</span>.__proto__ === <span class="built_in">Function</span>.prototype   <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Error</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Date</span>.__proto__ === <span class="built_in">Function</span>.prototype    <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Date</span>.constructor == <span class="built_in">Function</span> <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
 <p>而Math与JSON以对象形式存在，所以：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Math</span>.__proto__ === <span class="built_in">Object</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Math</span>.construrctor == <span class="built_in">Object</span> <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">JSON</span>.__proto__ === <span class="built_in">Object</span>.prototype  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">JSON</span>.construrctor == <span class="built_in">Object</span> <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
 <p>再一个例子</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="built_in">console</span>.log(person1.__proto__ === Person.prototype); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(Person.prototype.__proto__ === <span class="built_in">Object</span>.prototype) <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.__proto__) <span class="comment">//null</span></span><br><span class="line"></span><br><span class="line">Person.__proto__ == <span class="built_in">Function</span>.prototype; <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span>.prototype)<span class="comment">// function()&#123;&#125; (空函数)</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<p>注意： </p>
+<p>注意：</p>
 <ul>
 <li>大部分prototype都是object类型，但Function.prototype是function类型。</li>
-<li>Object.prototype.<strong>proto</strong>=null 由于Object是所有类的父类，类似于根节点，所以其prototype的<strong>proto</strong>为null。</li>
-<li>当试图引用某对象的某属性时，首先会在该对象的内部查找是否有该属性，找不到，就会去对象的<strong>proto</strong>属性里找，接着又会在<strong>proto</strong>属性所指的对象的<strong>proto</strong>里查找，一直查到Object的Protot。</li>
+<li>Object.prototype.<strong>proto</strong>=null 由于Object是所有类的父类，类似于根节点，所以其prototype的__proto__为null。</li>
+<li>当试图引用某对象的某属性时，首先会在该对象的内部查找是否有该属性，找不到，就会去对象的__proto__属性里找，接着又会在__proto__属性所指的对象的__proto__里查找，一直查到Object的Protot。</li>
 </ul>
 </blockquote>
-<h2 id="instanceof-运算符"><a href="#instanceof-运算符" class="headerlink" title="instanceof 运算符"></a>instanceof 运算符</h2><p>左侧为待测的实例对象，右侧为构造函数（构造函数即类名，是类的共有标识）。instanceof会检查左侧对象是否继承自右侧构造函数的prototype对象。可以不是直接继承。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.jianshu.com/p/dee9f8b14771" target="_blank" rel="noopener">https://www.jianshu.com/p/dee9f8b14771</a></p>
+<h2 id="instanceof-运算符"><a class="markdownIt-Anchor" href="#instanceof-运算符"></a> instanceof 运算符</h2>
+<p>左侧为待测的实例对象，右侧为构造函数（构造函数即类名，是类的共有标识）。instanceof会检查左侧对象是否继承自右侧构造函数的prototype对象。可以不是直接继承。</p>
+<h3 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h3>
+<p><a href="https://www.jianshu.com/p/dee9f8b14771" target="_blank" rel="noopener">https://www.jianshu.com/p/dee9f8b14771</a></p>
 
       
     </div>
@@ -633,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-原型（prototype）"><span class="nav-number">2.</span> <span class="nav-text">JS 原型（prototype）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#instanceof-运算符"><span class="nav-number">3.</span> <span class="nav-text">instanceof 运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">1.</span> <span class="nav-text"> 构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#js-原型prototype"><span class="nav-number">2.</span> <span class="nav-text"> JS 原型（prototype）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#instanceof-运算符"><span class="nav-number">3.</span> <span class="nav-text"> instanceof 运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.1.</span> <span class="nav-text"> 参考</span></a></li></ol></li></ol></div>
             
 
           </div>

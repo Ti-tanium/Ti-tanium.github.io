@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
-
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存）  流程访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。">
+<meta name="description" content="HTTP缓存  类型  强缓存（本地缓存） 弱缓存（协商缓存）   流程 访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Mod">
 <meta name="keywords" content="Computer Network,HTTP,Cache">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP 强缓存vs弱缓存">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/07/22/强缓存vs弱缓存/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存）  流程访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。">
+<meta property="og:description" content="HTTP缓存  类型  强缓存（本地缓存） 弱缓存（协商缓存）   流程 访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Mod">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-07-22T05:46:24.313Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP 强缓存vs弱缓存">
-<meta name="twitter:description" content="HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存）  流程访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。">
+<meta name="twitter:description" content="HTTP缓存  类型  强缓存（本地缓存） 弱缓存（协商缓存）   流程 访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Mod">
 
 
 
@@ -395,30 +395,38 @@
       
 
       
-        <h1 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h1><h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><ul>
+        <h1 id="http缓存"><a class="markdownIt-Anchor" href="#http缓存"></a> HTTP缓存</h1>
+<h2 id="类型"><a class="markdownIt-Anchor" href="#类型"></a> 类型</h2>
+<ul>
 <li>强缓存（本地缓存）</li>
 <li>弱缓存（协商缓存）</li>
 </ul>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>访问静态资源时的流程</p>
+<h2 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h2>
+<p>访问静态资源时的流程</p>
 <ol>
 <li>强缓存阶段：先在本地查找是否有该资源，若有，且<code>Expires</code>和<code>Cache-Control</code>都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。</li>
 <li>弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回<code>304Not Modified</code>。则浏览器继续使用该资源。</li>
 <li>缓存失败阶段：若在本地没有找到对应资源，或者资源已过期/更新，则服务器返回该资源。</li>
 </ol>
-<h2 id="强缓存VS弱缓存"><a href="#强缓存VS弱缓存" class="headerlink" title="强缓存VS弱缓存"></a>强缓存VS弱缓存</h2><ul>
+<h2 id="强缓存vs弱缓存"><a class="markdownIt-Anchor" href="#强缓存vs弱缓存"></a> 强缓存VS弱缓存</h2>
+<ul>
 <li>状态码</li>
 </ul>
-<p>强缓存返回200<br>弱缓存返回304</p>
+<p>强缓存返回200<br>
+弱缓存返回304</p>
 <ul>
 <li>强缓存不需要发出http请求，而弱缓存需要。</li>
 </ul>
-<h2 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h2><p>使用<code>Expires</code>和<code>cache-control</code>来控制。优先级：<code>pragma</code>&gt;<code>cache-control</code>&gt;<code>Expires</code></p>
+<h2 id="强缓存"><a class="markdownIt-Anchor" href="#强缓存"></a> 强缓存</h2>
+<p>使用<code>Expires</code>和<code>cache-control</code>来控制。优先级：<code>pragma</code>&gt;<code>cache-control</code>&gt;<code>Expires</code></p>
 <ul>
-<li><p><code>Expires</code></p>
-<p>  服务器为资源设置一个<code>Expire</code>日期，在这<code>Expire</code>日期之前可以将资源视作最新。此字段是为了兼容旧版本HTTP才保留的，在http1.0时配合pragma使用，<code>pragma：no-cache</code>表示不缓存，<code>pragma</code>的优先级大于<code>Expires</code></p>
+<li>
+<p><code>Expires</code></p>
+<p>服务器为资源设置一个<code>Expire</code>日期，在这<code>Expire</code>日期之前可以将资源视作最新。此字段是为了兼容旧版本HTTP才保留的，在http1.0时配合pragma使用，<code>pragma：no-cache</code>表示不缓存，<code>pragma</code>的优先级大于<code>Expires</code></p>
 </li>
-<li><p><code>Cache-Control</code></p>
-<p>  <code>Cache-Control</code>是<code>http1.1</code>为了弥补<code>Expires</code>的缺陷而加入的（http1.0时，使用<code>pragma</code>），当<code>Expires</code>和<code>Cache-Control</code>同时存在时，<code>Cache-Control</code>的优先级高于<code>Expires</code>。</p>
+<li>
+<p><code>Cache-Control</code></p>
+<p><code>Cache-Control</code>是<code>http1.1</code>为了弥补<code>Expires</code>的缺陷而加入的（http1.0时，使用<code>pragma</code>），当<code>Expires</code>和<code>Cache-Control</code>同时存在时，<code>Cache-Control</code>的优先级高于<code>Expires</code>。</p>
 <table>
 <thead>
 <tr>
@@ -426,7 +434,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>public</td>
 <td>服务器端和浏览器端都可以缓存</td>
 </tr>
@@ -454,20 +463,24 @@
 <td>must-revalidate</td>
 <td>缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 </li>
 </ul>
-<h2 id="弱缓存"><a href="#弱缓存" class="headerlink" title="弱缓存"></a>弱缓存</h2><p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
+<h2 id="弱缓存"><a class="markdownIt-Anchor" href="#弱缓存"></a> 弱缓存</h2>
+<p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
 <ul>
 <li><code>Last-Modified</code>和<code>Etag</code>为响应头部字段，分别对应请求头部字段中的<code>if-Modifed-Since</code>/<code>If-None-Match</code>。</li>
 </ul>
 <p><code>Last-Modified</code>/<code>If-Modified-Since</code>存在缺陷，当资源的实际内容没有改变而仅仅只是时间变化了（比如只是打开了文件，并保存了一下，尽管内容没有变化但还是修改过），还是需要重新请求资源。因此为了解决这个缺陷，http1.1提出了<code>Etag</code>/<code>If-None-Match</code>，<code>Etag</code>类似于文件的hash，为文件提供了一个指纹，只检查文件内容是否一致。</p>
-<h3 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h3><ol>
+<h3 id="流程-2"><a class="markdownIt-Anchor" href="#流程-2"></a> 流程：</h3>
+<ol>
 <li>当没有命中强缓存时，进入弱缓存阶段</li>
 <li>浏览器首次访问网站时，服务器会在响应头部中附上<code>Last-Modified</code>/<code>Etag</code></li>
 <li>弱缓存阶段，浏览器再次访问时，会发送<code>If-Modified-Since</code>/<code>If-None-Match</code>去询问是否有改变，有则重新获取，否则使用本地缓存。</li>
 </ol>
-<h2 id="缓存与浏览器刷新"><a href="#缓存与浏览器刷新" class="headerlink" title="缓存与浏览器刷新"></a>缓存与浏览器刷新</h2><ul>
+<h2 id="缓存与浏览器刷新"><a class="markdownIt-Anchor" href="#缓存与浏览器刷新"></a> 缓存与浏览器刷新</h2>
+<ul>
 <li>F5刷新，会使强缓存失效，浏览器进行协商缓存。</li>
 <li>Ctrl+F5刷新，为强制刷新，强缓存与弱缓存均失效，浏览器总会发送HTTP请求向服务器获取最新数据。</li>
 </ul>
@@ -677,7 +690,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP缓存"><span class="nav-number">1.</span> <span class="nav-text">HTTP缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类型"><span class="nav-number">1.1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">1.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存VS弱缓存"><span class="nav-number">1.3.</span> <span class="nav-text">强缓存VS弱缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存"><span class="nav-number">1.4.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#弱缓存"><span class="nav-number">1.5.</span> <span class="nav-text">弱缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程："><span class="nav-number">1.5.1.</span> <span class="nav-text">流程：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存与浏览器刷新"><span class="nav-number">1.6.</span> <span class="nav-text">缓存与浏览器刷新</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http缓存"><span class="nav-number">1.</span> <span class="nav-text"> HTTP缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类型"><span class="nav-number">1.1.</span> <span class="nav-text"> 类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">1.2.</span> <span class="nav-text"> 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存vs弱缓存"><span class="nav-number">1.3.</span> <span class="nav-text"> 强缓存VS弱缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强缓存"><span class="nav-number">1.4.</span> <span class="nav-text"> 强缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#弱缓存"><span class="nav-number">1.5.</span> <span class="nav-text"> 弱缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程-2"><span class="nav-number">1.5.1.</span> <span class="nav-text"> 流程：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存与浏览器刷新"><span class="nav-number">1.6.</span> <span class="nav-text"> 缓存与浏览器刷新</span></a></li></ol></li></ol></div>
             
 
           </div>

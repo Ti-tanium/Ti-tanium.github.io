@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
-
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="算法比较对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度    暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)   KMP算法 核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：   虽然懂了KMP的大概思路，但写出来的代码还">
+<meta name="description" content="算法比较 对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度     暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)     KMP算法  核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：  虽然懂了KMP的大概思路，但写出">
 <meta name="keywords" content="Algorithm,Sunday,String Matching,LeetCode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="String Matching Algorithm——Sunday">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/07/10/字符串匹配算法———Sunday/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="算法比较对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度    暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)   KMP算法 核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：   虽然懂了KMP的大概思路，但写出来的代码还">
+<meta property="og:description" content="算法比较 对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度     暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)     KMP算法  核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：  虽然懂了KMP的大概思路，但写出">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-07-11T06:29:43.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="String Matching Algorithm——Sunday">
-<meta name="twitter:description" content="算法比较对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度    暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)   KMP算法 核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：   虽然懂了KMP的大概思路，但写出来的代码还">
+<meta name="twitter:description" content="算法比较 对长为m的源串，长为n的子串进行匹配    算法 最坏时间复杂度 最优时间复杂度     暴力双循环 O(m*n) \   KMP O(m+n) \   Sunday O(m*n) O(m/n)     KMP算法  核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。  可参考以下Youtube视频：  虽然懂了KMP的大概思路，但写出">
 
 
 
@@ -384,7 +384,8 @@
       
 
       
-        <h1 id="算法比较"><a href="#算法比较" class="headerlink" title="算法比较"></a>算法比较</h1><p>对长为m的源串，长为n的子串进行匹配</p>
+        <h1 id="算法比较"><a class="markdownIt-Anchor" href="#算法比较"></a> 算法比较</h1>
+<p>对长为m的源串，长为n的子串进行匹配</p>
 <table>
 <thead>
 <tr>
@@ -393,7 +394,8 @@
 <th>最优时间复杂度</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>暴力双循环</td>
 <td>O(m*n)</td>
 <td>\</td>
@@ -408,19 +410,22 @@
 <td>O(m*n)</td>
 <td>O(m/n)</td>
 </tr>
-</tbody></table>
-<h1 id="KMP算法"><a href="#KMP算法" class="headerlink" title="KMP算法"></a>KMP算法</h1><blockquote>
+</tbody>
+</table>
+<h1 id="kmp算法"><a class="markdownIt-Anchor" href="#kmp算法"></a> KMP算法</h1>
+<blockquote>
 <p>核心:充分利用已知的信息，通过构建部分匹配表（Partial Match Table）来控制匹配位。</p>
 </blockquote>
 <p>可参考以下Youtube视频：</p>
 <div class="video-container"><iframe src="//www.youtube.com/embed/dgPabAsTFa8" frameborder="0" allowfullscreen></iframe></div>
-
 <p>虽然懂了KMP的大概思路，但写出来的代码还是一堆bug呀，果然还是功力不够，不过还好有Sunday算法，简单易懂，速度又快！</p>
-<h1 id="Sunday算法"><a href="#Sunday算法" class="headerlink" title="Sunday算法"></a>Sunday算法</h1><p>Sunday算法是对BM算法（Boyer-Moore算法）的进一步优化，是现代文字处理器中常用的字符串匹配算法。</p>
+<h1 id="sunday算法"><a class="markdownIt-Anchor" href="#sunday算法"></a> Sunday算法</h1>
+<p>Sunday算法是对BM算法（Boyer-Moore算法）的进一步优化，是现代文字处理器中常用的字符串匹配算法。</p>
 <blockquote>
 <p>核心：尽可能的跳过较多的字符串</p>
 </blockquote>
-<h2 id="参数介绍："><a href="#参数介绍：" class="headerlink" title="参数介绍："></a>参数介绍：</h2><ul>
+<h2 id="参数介绍"><a class="markdownIt-Anchor" href="#参数介绍"></a> 参数介绍：</h2>
+<ul>
 <li>主串S</li>
 <li>模式串P</li>
 <li>i 为主串S的的index，j为模式串P的index。</li>
@@ -428,12 +433,15 @@
 <li>slen：主串S的长度</li>
 <li>plen: 模式串P的长度</li>
 </ul>
-<h2 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h2><ul>
+<h2 id="算法步骤"><a class="markdownIt-Anchor" href="#算法步骤"></a> 算法步骤</h2>
+<ul>
 <li>首先初始状况是<code>i=j=0</code>，i指着S的首位，j指着P的首位，m则指着S的第<code>plen+1</code>位，及第6位</li>
-<li>判断<code>S[i]</code>与<code>P[j]</code>是否相等。<ul>
+<li>判断<code>S[i]</code>与<code>P[j]</code>是否相等。
+<ul>
 <li>若相等则<code>i++</code>，<code>j++</code>，比较下一位。</li>
 <li>若相等，且<code>j==plen-1</code>，也就是比较完毕了，则说明找到了目标，直接返回i-j即可。</li>
-<li>若是不相等，则需要看<code>S[m]</code>字符是否在P中出现<ul>
+<li>若是不相等，则需要看<code>S[m]</code>字符是否在P中出现
+<ul>
 <li>若没出现，则直接将j指向<code>S[m]</code>的下一位，i指向m+1的位置，j则重新置0，m则更新为 新的i+plen。</li>
 <li>若出现了，还是要想办法尽可能大的将P往后滑动。首先，找到模式串P中与<code>S[m]</code>字符相等字符的位置，然后将P串中的该字符与<code>S[m]</code>字符对齐。对齐时，P向右滑动了多少格，i更新的时候就加几，j则重置为0，m还是用更新后的i加plen：新i+plen。</li>
 <li>更新后若出现<code>m&gt;slen</code>的情况，说明已经比较完毕，仍没有找到目标，则<code>return -1</code>。</li>
@@ -442,7 +450,9 @@
 </ul>
 </li>
 </ul>
-<h2 id="实例讲解"><a href="#实例讲解" class="headerlink" title="实例讲解"></a>实例讲解</h2><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
+<h2 id="实例讲解"><a class="markdownIt-Anchor" href="#实例讲解"></a> 实例讲解</h2>
+<h2 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数</h2>
+<ul>
 <li>S: string matching algorithm</li>
 <li>P: rithm</li>
 <li>slen: 25</li>
@@ -483,7 +493,8 @@
 <th>m</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td></td>
 <td>i</td>
 <td></td>
@@ -567,8 +578,9 @@
 <td></td>
 <td></td>
 </tr>
-</tbody></table>
-<p>比较 <code>S[0]</code> 与 <code>P[0]</code>，发现不等，则直接看 <code>S[5]</code> 是否在P中出现，<code>&#39;rithm&#39;</code>里是没有<code>&#39;g&#39;</code>的，故直接将<code>P</code>移到<code>m</code>的下一位。</p>
+</tbody>
+</table>
+<p>比较 <code>S[0]</code> 与 <code>P[0]</code>，发现不等，则直接看 <code>S[5]</code> 是否在P中出现，<code>'rithm'</code>里是没有<code>'g'</code>的，故直接将<code>P</code>移到<code>m</code>的下一位。</p>
 <blockquote>
 <p>第一步更新后 i=6, j=0, m=11， 状态如下所示</p>
 </blockquote>
@@ -603,7 +615,8 @@
 <th>m</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -687,8 +700,9 @@
 <td></td>
 <td></td>
 </tr>
-</tbody></table>
-<p>比较<code>S[6]</code>与<code>P[0]</code>，发现<code>&#39; &#39;</code>不等于<code>&#39;r&#39;</code>，且<code>S[11]</code>在<code>&#39;rithm&#39;</code>的第3位出现。则需要将<code>P</code>中的<code>&#39;h&#39;</code>与<code>S</code>中的<code>&#39;h&#39;</code>对齐，只需要将<code>P</code>串向右移动两格（对应于<code>i=m-3=8</code>）</p>
+</tbody>
+</table>
+<p>比较<code>S[6]</code>与<code>P[0]</code>，发现<code>' '</code>不等于<code>'r'</code>，且<code>S[11]</code>在<code>'rithm'</code>的第3位出现。则需要将<code>P</code>中的<code>'h'</code>与<code>S</code>中的<code>'h'</code>对齐，只需要将<code>P</code>串向右移动两格（对应于<code>i=m-3=8</code>）</p>
 <blockquote>
 <p>第二步更新后 i=8, j=0, m=13， 状态如下所示</p>
 </blockquote>
@@ -723,7 +737,8 @@
 <th>m</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -807,8 +822,9 @@
 <td></td>
 <td></td>
 </tr>
-</tbody></table>
-<p>同样<code>S[8]!=P[0]</code>，且<code>S[13]</code>为<code>&#39;n&#39;</code>不存在于<code>&#39;rithm&#39;</code>，因此直接将P滑到m的下一位</p>
+</tbody>
+</table>
+<p>同样<code>S[8]!=P[0]</code>，且<code>S[13]</code>为<code>'n'</code>不存在于<code>'rithm'</code>，因此直接将P滑到m的下一位</p>
 <blockquote>
 <p>第三步更新后 i=14, j=0, m=19</p>
 </blockquote>
@@ -843,7 +859,8 @@
 <th>m</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -927,7 +944,8 @@
 <td></td>
 <td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>再次比较, <code>S[14]!=P[0]</code>, 且<code>S[19]</code>不在P中，再次将P滑到m的下一位。</p>
 <blockquote>
 <p>第四步更新后 i=20, j=0, m=25</p>
@@ -963,7 +981,8 @@
 <th>m</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -1047,12 +1066,13 @@
 <td></td>
 <td></td>
 </tr>
-</tbody></table>
-<p>这时候可以看到，<code>&#39;rithm&#39;</code>是匹配上了，一步一步比较，i与j逐步加1，直至<code>j=4</code>时，比较完毕，得到结果<code>i-j=24-4=20</code>。</p>
-<h2 id="LeetCode-题源"><a href="#LeetCode-题源" class="headerlink" title="LeetCode 题源"></a>LeetCode 题源</h2><p><a href="https://leetcode-cn.com/problems/implement-strstr/" target="_blank" rel="noopener">LeetCode 28. Implement strStr()</a></p>
+</tbody>
+</table>
+<p>这时候可以看到，<code>'rithm'</code>是匹配上了，一步一步比较，i与j逐步加1，直至<code>j=4</code>时，比较完毕，得到结果<code>i-j=24-4=20</code>。</p>
+<h2 id="leetcode-题源"><a class="markdownIt-Anchor" href="#leetcode-题源"></a> LeetCode 题源</h2>
+<p><a href="https://leetcode-cn.com/problems/implement-strstr/" target="_blank" rel="noopener">LeetCode 28. Implement strStr()</a></p>
 <p>AC 代码</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strStr</span><span class="params">(<span class="built_in">string</span> haystack, <span class="built_in">string</span> needle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(needle.empty())&#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> slen=haystack.length();</span><br><span class="line">        <span class="keyword">int</span> plen=needle.length();</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>,j=<span class="number">0</span>,k,m=plen; <span class="comment">// i 指 haystack，j 指 needle，</span></span><br><span class="line">        <span class="keyword">while</span>(i&lt;slen)&#123;</span><br><span class="line">            <span class="keyword">if</span>(haystack[i]!=needle[j])&#123;</span><br><span class="line">                <span class="keyword">for</span>(k=plen<span class="number">-1</span>;k&gt;=<span class="number">0</span>;k--)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(needle[k]==haystack[m])</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                i=m-k;</span><br><span class="line">                j=<span class="number">0</span>;</span><br><span class="line">                m=i+plen;</span><br><span class="line">                <span class="keyword">if</span>(m&gt;slen)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(j==plen<span class="number">-1</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> i-j;</span><br><span class="line">                &#125;</span><br><span class="line">                i++,j++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -1261,7 +1281,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#算法比较"><span class="nav-number">1.</span> <span class="nav-text">算法比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KMP算法"><span class="nav-number">2.</span> <span class="nav-text">KMP算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sunday算法"><span class="nav-number">3.</span> <span class="nav-text">Sunday算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数介绍："><span class="nav-number">3.1.</span> <span class="nav-text">参数介绍：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法步骤"><span class="nav-number">3.2.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例讲解"><span class="nav-number">3.3.</span> <span class="nav-text">实例讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.4.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode-题源"><span class="nav-number">3.5.</span> <span class="nav-text">LeetCode 题源</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#算法比较"><span class="nav-number">1.</span> <span class="nav-text"> 算法比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kmp算法"><span class="nav-number">2.</span> <span class="nav-text"> KMP算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sunday算法"><span class="nav-number">3.</span> <span class="nav-text"> Sunday算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数介绍"><span class="nav-number">3.1.</span> <span class="nav-text"> 参数介绍：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法步骤"><span class="nav-number">3.2.</span> <span class="nav-text"> 算法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例讲解"><span class="nav-number">3.3.</span> <span class="nav-text"> 实例讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.4.</span> <span class="nav-text"> 参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leetcode-题源"><span class="nav-number">3.5.</span> <span class="nav-text"> LeetCode 题源</span></a></li></ol></li></ol></div>
             
 
           </div>
