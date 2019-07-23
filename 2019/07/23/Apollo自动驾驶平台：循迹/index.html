@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Titanium, Blog">
+  <meta name="keywords" content="Autonomous Driving,Buido Apollo,Tracking,">
 
 
 
@@ -79,17 +79,23 @@
 
 
 
-<meta name="description" content="You shoot me down, but I won&apos;t fall. I am Titanium.">
-<meta name="keywords" content="Titanium, Computer Science, Blog, techonology">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Titanium&#39;s Blog">
-<meta property="og:url" content="https://ti-tanium.github.io/tags/Environment-Setup/index.html">
+<meta name="description" content="线性二次调节器LQR线性二次调节器（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：横向误差、横向误差变化率、朝向误差和朝向误差变化率，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：转向、加速和制">
+<meta name="keywords" content="Autonomous Driving,Buido Apollo,Tracking">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apollo自动驾驶平台：循迹">
+<meta property="og:url" content="https://ti-tanium.github.io/2019/07/23/Apollo自动驾驶平台：循迹/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="You shoot me down, but I won&apos;t fall. I am Titanium.">
+<meta property="og:description" content="线性二次调节器LQR线性二次调节器（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：横向误差、横向误差变化率、朝向误差和朝向误差变化率，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：转向、加速和制">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ti-tanium.github.io/images/LQR-1.png">
+<meta property="og:image" content="https://ti-tanium.github.io/images/LQR-2.png">
+<meta property="og:image" content="https://ti-tanium.github.io/images/LQR-3.png">
+<meta property="og:image" content="https://ti-tanium.github.io/images/LQR-4.png">
+<meta property="og:updated_time" content="2019-07-23T13:41:52.164Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Titanium&#39;s Blog">
-<meta name="twitter:description" content="You shoot me down, but I won&apos;t fall. I am Titanium.">
+<meta name="twitter:title" content="Apollo自动驾驶平台：循迹">
+<meta name="twitter:description" content="线性二次调节器LQR线性二次调节器（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：横向误差、横向误差变化率、朝向误差和朝向误差变化率，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：转向、加速和制">
+<meta name="twitter:image" content="https://ti-tanium.github.io/images/LQR-1.png">
 
 
 
@@ -119,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://ti-tanium.github.io/tags/Environment-Setup/">
+  <link rel="canonical" href="https://ti-tanium.github.io/2019/07/23/Apollo自动驾驶平台：循迹/">
 
 
 
 
 
-  <title>Tag: Environment Setup | Titanium's Blog</title>
+  <title>Apollo自动驾驶平台：循迹 | Titanium's Blog</title>
   
 
 
@@ -144,7 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -270,52 +276,227 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Environment Setup<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/23/Apollo自动驾驶平台：循迹/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Titanium">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Titanium's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/07/22/Apollo自动驾驶平台：工控机软件系统安装教程/" itemprop="url">
-              
-                <span itemprop="name">Apollo自动驾驶平台：工控机软件系统安装教程</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Apollo自动驾驶平台：循迹</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-22T14:07:45+08:00" content="2019-07-22">
-          07-22
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-23T20:37:34+08:00">
+                2019-07-23
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Autonomous-Driving/" itemprop="url" rel="index">
+                    <span itemprop="name">Autonomous Driving</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/23/Apollo自动驾驶平台：循迹/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/23/Apollo自动驾驶平台：循迹/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="线性二次调节器LQR"><a href="#线性二次调节器LQR" class="headerlink" title="线性二次调节器LQR"></a>线性二次调节器LQR</h1><p><strong>线性二次调节器</strong>（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：<strong>横向误差</strong>、<strong>横向误差变化率</strong>、<strong>朝向误差</strong>和<strong>朝向误差变化率</strong>，这四个参数构成1×4的列向量X。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：<strong>转向</strong>、<strong>加速</strong>和<strong>制动</strong>,这个三个控制输入集合称为U。</p>
+<p><img src="/images/LQR-1.png" alt="LQR-X-U"></p>
+<p>x和u与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。</p>
+<p><img src="/images/LQR-2.png" alt="LQR-2"></p>
+<p>最优的u应该最小化二次项的和随时间的积分。</p>
+<p><img src="/images/LQR-3.png" alt="LQR-3"></p>
+<p>Q和R代表x和u的权重集合。xT和uT是转置矩阵，这意味着它们几乎与x和u相同，只是重新排列以便矩阵相乘。x乘以xT，u乘以uT，实质上是将每个矩阵乘以它自己。<br>Q在Apollo代码中对应<code>modules/control/conf/scout_conf.pb.txt</code>文件下的下面配置参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix_q: 0.001</span><br><span class="line">matrix_q: 0.0</span><br><span class="line">matrix_q: 0.01</span><br><span class="line">matrix_q: 0.0</span><br></pre></td></tr></table></figure>
+
+<p>R则对应</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r: 0.00001</span><br></pre></td></tr></table></figure>
+
+<p>循迹过程中可以修改以上参数以使得小车更加稳定地进行循迹。</p>
+<p>在LQR中，控制方法被描述为u=-Kx。其中，K代表一个复杂的skeme，代表如何从x计算出u。所以找到一个最优的u就是找到一个最优的K。<br><img src="/images/LQR-4.png" alt="LQR-4"></p>
+<h1 id="循迹操作流程"><a href="#循迹操作流程" class="headerlink" title="循迹操作流程"></a>循迹操作流程</h1><ol>
+<li><p>将操作者电脑连接至开发套件（小车）的无线网络中（小车自带一个路由）</p>
+</li>
+<li><p>操作电脑使用ssh远程登录至小车，若是直接在小车的系统上进行操作可以免去步骤1和2.</p>
+</li>
+<li><p>进入到apollo代码的根目录下，启用docker环境, 并进入docker环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash docker/scripts/dev_start.sh</span><br><span class="line">bash docker/scripts/dev_into.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动DreamView，执行bootstrap.sh脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash scripts/bootstrap.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在浏览器中打开DreamView，输入小车的IP地址:8888即可（若是在小车系统上，直接用localhost:8888即可访问）。</p>
+</li>
+<li><p>在<code>Module Controller</code>下打开<code>CAN Bus</code>、<code>Localization</code>、<code>GPS</code>、<code>Control</code>模块（注意<code>Control</code>模块最后打开）</p>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>为保证可以接受到GPS信号，尽量在开阔处进行测试。</li>
+<li>若有修改参数，无需重新编译代码，直接将对应的模块重新打开一下即可。</li>
+<li>注意观察<code>Task</code>菜单下的<code>Module Delay</code>，若出现红色的延时，重新打开一下对应的模块。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>将小车停至合适的位置（想要循迹的初始位置），操作者将<code>Module Controller</code>下的<code>data recorder</code>（录制运行时的数据）和<code>RTK recorder</code>（录制轨迹）打开后，就可以开始使用遥控器操控小车行驶来录制轨迹数据了。</p>
+</li>
+<li><p>录制完毕后，将<code>data recorder</code>、<code>RTK recorder</code>模块关闭，将小车停至循迹的初始点，打开<code>Module Controller</code>下的<code>Player</code>，用遥控器将小车切入自动驾驶模式。然后在<code>DreamView</code>下的<code>Task</code>菜单下点击<code>Start Auto</code>，小车便可以开始自动循迹。</p>
+<blockquote>
+<p>注意：循迹期间需<strong>密切关注</strong>小车的行驶情况，遇险时应立即使用遥控接管或拍下小车后面的急停按钮。</p>
+</blockquote>
+</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Autonomous-Driving/" rel="tag"># Autonomous Driving</a>
+          
+            <a href="/tags/Buido-Apollo/" rel="tag"># Buido Apollo</a>
+          
+            <a href="/tags/Tracking/" rel="tag"># Tracking</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/22/Apollo自动驾驶平台：工控机软件系统安装教程/" rel="next" title="Apollo自动驾驶平台：工控机软件系统安装教程">
+                <i class="fa fa-chevron-left"></i> Apollo自动驾驶平台：工控机软件系统安装教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -323,6 +504,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -343,8 +538,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -422,6 +626,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线性二次调节器LQR"><span class="nav-number">1.</span> <span class="nav-text">线性二次调节器LQR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#循迹操作流程"><span class="nav-number">2.</span> <span class="nav-text">循迹操作流程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -562,6 +782,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -579,6 +803,18 @@
       <script id="dsq-count-scr" src="https://ti-tanium.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://ti-tanium.github.io/2019/07/23/Apollo自动驾驶平台：循迹/';
+          this.page.identifier = '2019/07/23/Apollo自动驾驶平台：循迹/';
+          this.page.title = 'Apollo自动驾驶平台：循迹';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ti-tanium.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
