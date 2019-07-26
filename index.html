@@ -285,6 +285,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/24/draft1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Titanium">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Titanium's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/24/draft1/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-24T11:11:58+08:00">
+                2019-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/24/draft1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/24/draft1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>cyber_monitor all </p>
+<p>lidar default IP: 192.168.1.201</p>
+<p>test whether connected to lidar:<br><code>ping 192.168.1.201</code><br>or type the ip in browser.</p>
+<p>dag/velodyne.dag</p>
+<p>change configure does not require rebuild</p>
+<p>every module has a launch file<br>`<br>cyber_launch start {launch file}</p>
+<p>the ratio of matrix.q and r</p>
+<p>cyber_luanch module/perception/production/launch perception_lidar.launch</p>
+<p>flag topic:lidar_16_front_center_topic</p>
+<p>modules/perception/obstacle/onboard/lidar_process_suborde.cc 583<br>car_affine.matrix().inverse()</p>
+<p>ROS vs Cyber RT: <a href="https://blog.csdn.net/kesalin/article/details/88914029" target="_blank" rel="noopener">https://blog.csdn.net/kesalin/article/details/88914029</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/23/Apollo自动驾驶平台：循迹/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -388,11 +528,11 @@
       
         
           
-            <h1 id="线性二次调节器LQR"><a href="#线性二次调节器LQR" class="headerlink" title="线性二次调节器LQR"></a>线性二次调节器LQR</h1><p><strong>线性二次调节器</strong>（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：<strong>横向误差 $cte$</strong>、<strong>横向误差变化率 $\dot{cte}$</strong>、<strong>朝向误差 $\theta$</strong>和<strong>朝向误差变化率 $\dot{\theta}$</strong>，这四个参数构成1×4的列向量$X$。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：<strong>转向</strong>、<strong>加速</strong>和<strong>制动</strong>,这个三个控制输入集合称为$U$。</p>
+            <h1 id="线性二次调节器LQR"><a href="#线性二次调节器LQR" class="headerlink" title="线性二次调节器LQR"></a>线性二次调节器LQR</h1><p><strong>线性二次调节器</strong>（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：<strong>横向误差 $cte$</strong>、<strong>横向误差变化率 $\dot{cte}$</strong>、<strong>朝向误差 $\theta$</strong>和<strong>朝向误差变化率 $\dot{\theta}$</strong>，这四个参数构成1×4的列向量$x$。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：<strong>转向</strong>、<strong>加速</strong>和<strong>制动</strong>,这个三个控制输入集合称为$u$。</p>
 <p><img src="/images/LQR-1.png" alt="LQR-X-U"></p>
-<p>$X$和$U$与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。</p>
+<p>$x$和$u$与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。</p>
 <script type="math/tex; mode=display">
-w_1cte^2+w_2\dot{cte}^2+w_3\theta^2+w_4\dot{\theta}^2+w_5*steering^2+w_6*throttle^2+w_7*brake^2</script><p>最优的$U$应该最小化二次项的和随时间的积分。</p>
+w_1cte^2+w_2\dot{cte}^2+w_3\theta^2+w_4\dot{\theta}^2+w_5*steering^2+w_6*throttle^2+w_7*brake^2</script><p>最优的$u$应该最小化二次项的和随时间的积分。</p>
 <script type="math/tex; mode=display">
 cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权重集合。$x^T$和$u^T$是转置矩阵，这意味着它们几乎与$x$和$u$相同，只是重新排列以便矩阵相乘。$x$乘以$x^T$，$u$乘以$u^T$，实质上是将每个矩阵乘以它自己。<br>$Q$在Apollo代码中对应<code>modules/control/conf/scout_conf.pb.txt</code>文件下的下面配置参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix_q: 0.001</span><br><span class="line">matrix_q: 0.0</span><br><span class="line">matrix_q: 0.01</span><br><span class="line">matrix_q: 0.0</span><br></pre></td></tr></table></figure></p>
 <p>$R$则对应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r: 0.00001</span><br></pre></td></tr></table></figure></p>
@@ -612,18 +752,18 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
 </ol>
 </li>
 </ul>
-<h2 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h2><p>只需在Ubantu里运行Apollo提供的脚本即可，<a href="https://github.com/ApolloAuto/apollo/blob/master/docker/setup_host/install_docker.sh" target="_blank" rel="noopener">脚本链接</a></p>
+<h2 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h2><p>只需在Ubantu里运行Apollo提供的脚本即可，<a href="https://github.com/ApolloAuto/apollo/blob/master/docker/setup_host/install_docker.sh" target="_blank" rel="noopener">脚本链接</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ./install_docker.sh</span><br></pre></td></tr></table></figure></p>
 <h2 id="Apollo源代码编译"><a href="#Apollo源代码编译" class="headerlink" title="Apollo源代码编译"></a>Apollo源代码编译</h2><p>首先获取Apollo源代码，约1G左右，下载时间较长，耐心等待。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ApolloAuto/apollo.git</span><br></pre></td></tr></table></figure>
 <p>下载完后，cd进入代码的根目录下，依次执行以下脚本，执行时间较长。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash docker/scripts/dev_start.sh</span><br><span class="line">bash docker/scripts/dev_into.sh</span><br><span class="line">bash apollo.sh build</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash docker/scripts/dev_start.sh  </span><br><span class="line">bash docker/scripts/dev_into.sh</span><br><span class="line">bash apollo.sh build</span><br></pre></td></tr></table></figure>
 <p>编译完成后，执行下面命令打开DreamView交互平台。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash scripts/bootstrap.sh</span><br></pre></td></tr></table></figure>
 <p>启动成功的提示信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Start roscore...</span><br><span class="line">Launched module monitor.</span><br><span class="line">Launched module dreamview.</span><br><span class="line">Dreamview is running at http://localhost:8888</span><br></pre></td></tr></table></figure>
 <p>在浏览器上访问<a href="http://localhost:8888，即可打开DreamView。DreamView界面如下所示：" target="_blank" rel="noopener">http://localhost:8888，即可打开DreamView。DreamView界面如下所示：</a></p>
 <p><img src="/images/apollo-dreamview.png" alt="Dreamview user interface"></p>
-<p>到此环境就配置完毕, <a href>下一个教程介绍如何使用DreamView完成循迹</a></p>
+<p>到此环境就配置完毕, <a href="https://ti-tanium.github.io/2019/07/23/Apollo%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0%EF%BC%9A%E5%BE%AA%E8%BF%B9/">下一个教程介绍如何使用DreamView完成循迹</a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>Apollo开源代码git仓库的<a href="https://github.com/ApolloAuto/apollo/blob/r3.0.0/docs/specs/apollo_3.0_development_kits_user_manual_cn.md?tdsourcetag=s_pcqq_aiomsg#%E5%B7%A5%E6%8E%A7%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85" target="_blank" rel="noopener">官方教程</a>。</p>
 
           
@@ -2446,7 +2586,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
