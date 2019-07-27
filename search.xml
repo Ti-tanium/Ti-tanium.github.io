@@ -20,11 +20,6 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>%2F2019%2F07%2F24%2Fdraft1%2F</url>
-    <content type="text"><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[Apollo自动驾驶平台：循迹]]></title>
     <url>%2F2019%2F07%2F23%2FApollo%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6%E5%B9%B3%E5%8F%B0%EF%BC%9A%E5%BE%AA%E8%BF%B9%2F</url>
     <content type="text"><![CDATA[线性二次调节器LQR线性二次调节器（Linear Quadratic Regulator 或LQR）是基于模型的控制器，它通过控制车辆状态来使小车运动的横向误差和朝向误差最小化。Apollo使用LQR进行横向控制。横向控制包含四个参数：横向误差 $cte$、横向误差变化率 $\dot{cte}$、朝向误差 $\theta$和朝向误差变化率 $\dot{\theta}$，这四个参数构成1×4的列向量$x$。变化率与导数相同，用变量名上面的一个点来代表。该车有三个控制输入：转向、加速和制动,这个三个控制输入集合称为$u$。 $x$和$u$与自身相乘，这样负值也会产生正平方，为每个二次项分配权重，并将它们加在一起。 w_1cte^2+w_2\dot{cte}^2+w_3\theta^2+w_4\dot{\theta}^2+w_5*steering^2+w_6*throttle^2+w_7*brake^2最优的$u$应该最小化二次项的和随时间的积分。 cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt$Q$和$R$代表$x$和$u$的权重集合。$x^T$和$u^T$是转置矩阵，这意味着它们几乎与$x$和$u$相同，只是重新排列以便矩阵相乘。$x$乘以$x^T$，$u$乘以$u^T$，实质上是将每个矩阵乘以它自己。$Q$在Apollo代码中对应modules/control/conf/scout_conf.pb.txt文件下的下面配置参数1234matrix_q: 0.001matrix_q: 0.0matrix_q: 0.01matrix_q: 0.0 $R$则对应1r: 0.00001 循迹过程中可以修改以上参数以使得小车更加稳定地进行循迹。 在LQR中，控制方法被描述为$u=-Kx$。其中，$K$代表一个复杂的skeme，代表如何从$x$计算出$u$。所以找到一个最优的u就是找到一个最优的$K$。 循迹操作流程 将操作者电脑连接至开发套件（小车）的无线网络中（小车自带一个路由） 操作电脑使用ssh远程登录至小车，若是直接在小车的系统上进行操作可以免去步骤1和2. 进入到apollo代码的根目录下，启用docker环境, 并进入docker环境 12bash docker/scripts/dev_start.shbash docker/scripts/dev_into.sh 启动DreamView，执行bootstrap.sh脚本 1bash scripts/bootstrap.sh 在浏览器中打开DreamView，输入小车的IP地址:8888即可（若是在小车系统上，直接用localhost:8888即可访问）。 在Module Controller下打开CAN Bus、Localization、GPS. 注意： 为保证可以接受到GPS信号，尽量在开阔处进行测试。 若有修改参数，无需重新编译代码，直接将对应的模块重新打开一下即可。 注意观察Task菜单下的Module Delay，若出现红色的延时，重新打开一下对应的模块。 将小车停至合适的位置（想要循迹的初始位置），操作者将Module Controller下的data recorder（录制运行时的数据）和RTK recorder（录制轨迹）打开后，就可以开始使用遥控器操控小车行驶来录制轨迹数据了。 录制完毕后，将data recorder、RTK recorder模块关闭，将小车停至循迹的初始点，打开Module Controller下的RTK replay、control，用遥控器将小车切入自动驾驶模式。然后在DreamView下的Task菜单下点击Start Auto，小车便可以开始自动循迹。 注意：循迹期间需密切关注小车的行驶情况，遇险时应立即使用遥控接管或拍下小车后面的急停按钮。]]></content>
@@ -45,8 +40,8 @@
         <category>Autonomous Driving</category>
       </categories>
       <tags>
-        <tag>Autonomous Driving</tag>
         <tag>Environment Setup</tag>
+        <tag>Autonomous Driving</tag>
         <tag>Baidu Apollo</tag>
         <tag>Multiple Operating System</tag>
         <tag>Ubantu</tag>
