@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Autonomous Driving,Baidu Apollo,PointCloud,Lidar,Obstacle Detection,">
+  <meta name="keywords" content="Autonomous Driving,Baidu Apollo,PointCloud,Lidar,Obstacle Detection,protobuf,Cyber RT,gflags,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="The `` tag is not supported by your browser.">
-<meta name="keywords" content="Autonomous Driving,Baidu Apollo,PointCloud,Lidar,Obstacle Detection">
+<meta name="description" content="Cyber RTApollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：  实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。 确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber R">
+<meta name="keywords" content="Autonomous Driving,Baidu Apollo,PointCloud,Lidar,Obstacle Detection,protobuf,Cyber RT,gflags">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Apollo自动驾驶平台：订阅点云数据实现避障">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/07/26/Apollo自动驾驶平台：订阅点云数据实现避障/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="The `` tag is not supported by your browser.">
+<meta property="og:description" content="Cyber RTApollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：  实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。 确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber R">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-26T13:19:11.253Z">
+<meta property="og:updated_time" content="2019-07-27T08:51:20.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apollo自动驾驶平台：订阅点云数据实现避障">
-<meta name="twitter:description" content="The `` tag is not supported by your browser.">
+<meta name="twitter:description" content="Cyber RTApollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：  实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。 确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber R">
 
 
 
@@ -389,7 +389,98 @@
       
 
       
-        <video width="100%" height="400" src="/images/obstacle-detection-test.mp4" controls="controls">
+        <h1 id="Cyber-RT"><a href="#Cyber-RT" class="headerlink" title="Cyber RT"></a>Cyber RT</h1><p>Apollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：</p>
+<ul>
+<li>实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。</li>
+<li>确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber RT将任务调度从内核空间移至用户空间，调度可以与算法逻辑密切结合。</li>
+</ul>
+<h1 id="Apollo-代码结构"><a href="#Apollo-代码结构" class="headerlink" title="Apollo 代码结构"></a>Apollo 代码结构</h1><h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p>(Apollo 5.0 Github 开源代码)[<a href="https://github.com/ApolloAuto/apollo/tree/r5.0.0" target="_blank" rel="noopener">https://github.com/ApolloAuto/apollo/tree/r5.0.0</a>]</p>
+<ul>
+<li><code>/cyber</code>:Baidu研发的Cyber RT系统</li>
+<li><code>/data</code><ul>
+<li><code>/bag</code>:可以用于放置录制的数据包，用于仿真模拟。可以通过<code>cyber_recorder play -f /data/bag/test_filename</code>来播放数据包</li>
+<li><code>/log</code>:保存着运行的日志文件。</li>
+</ul>
+</li>
+<li><code>/docs</code>:大量的代码文档、操作文档、说明书等。</li>
+<li><code>/docker</code>:有关docker操作的一些脚本文件</li>
+<li><code>/modules</code>:核心模块，包含bridge、calibaration、canbus、common、contrib、control、data、dreamview、drivers、guardian、localization、map、monitor、perception、planning、prediction、routing、v2x等模块</li>
+<li><code>/scripts</code>:包含调试、运行的一些脚本。</li>
+</ul>
+<h2 id="模块的结构"><a href="#模块的结构" class="headerlink" title="模块的结构"></a>模块的结构</h2><p>一个模块通常有<code>/conf</code>、<code>/dag</code>、<code>/proto</code>、<code>/launch</code>四个子目录。</p>
+<h3 id="launch"><a href="#launch" class="headerlink" title="/launch"></a>/launch</h3><p>以下为<code>modules/control/launch/control.launch</code>的内容，该文件主要指示了一个dag文件。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">cyber</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">module</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>control<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dag_conf</span>&gt;</span>/apollo/modules/control/dag/control.dag<span class="tag">&lt;/<span class="name">dag_conf</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">process_name</span>&gt;</span>control<span class="tag">&lt;/<span class="name">process_name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">module</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">cyber</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>若是想要单独启动某一模块，如control模块，可以通过以下脚本启动。当然也可以在浏览器里Dreamview界面里打开control模块的开关来启动control模块，但<strong>在命令行以脚本启动control模块可以看到输出的日志信息，便于错误排查</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyber_luanch module/control/launch/control.launch</span><br></pre></td></tr></table></figure></p>
+<h3 id="dag"><a href="#dag" class="headerlink" title="/dag"></a>/dag</h3><p>dag文件里主要指示了模块的配置文件(<code>flag_file_path</code>属性)，还是以control模块为例，以下为<code>modules/control/dag/control.dag</code>的内容<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">module_config &#123;</span><br><span class="line">    module_library : "/apollo/bazel-bin/modules/control/libcontrol_component.so"</span><br><span class="line">    timer_components &#123;</span><br><span class="line">        class_name : "ControlComponent"</span><br><span class="line">        config &#123;</span><br><span class="line">            name: "control"</span><br><span class="line">            flag_file_path: "/apollo/modules/control/conf/control.conf"</span><br><span class="line">            interval: 10</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="proto"><a href="#proto" class="headerlink" title="/proto"></a>/proto</h3><p><code>proto</code>是协议protobuf的简写，里面定义了发布的数据格式，<a href="https://halfrost.com/protobuf_encode/" target="_blank" rel="noopener">protobuf</a>是google团队开发的用于高效存储和读取结构化数据的工具。</p>
+<h3 id="conf"><a href="#conf" class="headerlink" title="/conf"></a>/conf</h3><p>里面主要包含模块的配置文件，包含了模块的一些参数，类似于在命令行执行脚本给的参数。由<code>control.dag</code>文件指向的主配置文件<code>control.conf</code>部分内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--flagfile=/apollo/modules/common/data/global_flagfile.txt</span><br><span class="line">--control_conf_file=/apollo/modules/control/conf/scout_conf.pb.txt</span><br><span class="line">--enable_speed_station_preview=false</span><br></pre></td></tr></table></figure></p>
+<p>这里的参数名可以在模块对应的common下的flags文件里定义，也可以在modules下的common模块里定义。比如<code>control/common/</code>目录下有<code>control_gflags.h</code>和 <code>control_gflags.cc</code>两个文件，分别用来声明参数名，和定义参数并给定参数默认值。</p>
+<p>比如若要自定一个模块配置参数<code>x_min</code>，首先需要在<code>control_gflags.h</code>里声明：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DECLARE_double(x_min);</span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>control_gflags.cc</code>里定义，中间参数为默认值，第三个参数为对参数的描述，类似于帮助文档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEFINE_double(x_min,0.0001,&quot;x min&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>然后若要使用参数<code>x_min</code>，则可以在其他文件里include <code>control_flags.h</code> 这个头文件，然后通过<code>FLAGS_x_min</code>来使用其值，如果需要更改<code>x_min</code>的值，则可以在<code>control.conf</code>文件里修改，如将其改为-5.0，可以增加以下一行。由于这些都是命令行参数，因此修改这些值，是<strong>不需要重新编译代码</strong>的，方便调参。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--x_min=-5.0</span><br></pre></td></tr></table></figure></p>
+<h1 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h1><p>主要更改代码的控制模块<code>modules/control/</code>，在控制模块通过订阅激光雷达的点云数据，获取小车正前方的的激光点云，判断若前方有障碍物则将让小车停下来。</p>
+<h2 id="修改control-Build文件"><a href="#修改control-Build文件" class="headerlink" title="修改control/Build文件"></a>修改control/Build文件</h2><p>由于要使用激光点云数据，需要额外增加依赖项，在<code>/modules/control/Build</code>文件里找到<code>cc_library</code>，在其<code>deps</code>数组里增加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;//modules/drivers/proto:sensor_proto&quot;,</span><br></pre></td></tr></table></figure></p>
+<p><code>sensor_proto</code>这个库的名字可以在<code>modules/drivers/proto/Build</code>文件下的<code>cc_proto_library</code>里找到。</p>
+<h2 id="初始化PointCloud-Reader"><a href="#初始化PointCloud-Reader" class="headerlink" title="初始化PointCloud Reader"></a>初始化PointCloud Reader</h2><p>Cyber RT采用<code>Publish/Subscribe</code>的通信机制，不同的模块在各自的<code>Channel</code>上发布<code>Publish</code>数据，其他模块可以通过订阅<code>Subscribe</code>来获取<code>Channel</code>上的数据。<br>而在订阅前，当然需要先指定一个Reader，由Reader去订阅数据并读取数据。<code>control</code>模块已经定义了<code>chassis_reader_</code>用于读取车底盘的数据、<code>localization_reader_</code>用于读取定位数据，可以获取车辆的ENU坐标、<code>trajectory_reader_</code>用于获取轨迹数据等reader，接下来就可以仿照这些reader定义自己的<code>point_cloud_reader_</code>了。<br>首先在<code>modules/control/control_component.h</code>文件里声明reader,需注意命名空间的问题。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;Reader&lt;apollo::drivers::PointCloud&gt;&gt;point_cloud_reader_;</span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>modules/control/control_component.cc</code>文件里的Init函数里对reader进行初始化：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Point cload initialization</span></span><br><span class="line">cyber::ReaderConfig pointcloud_reader_config;</span><br><span class="line"><span class="comment">// 设置reader的channel name，reader通过这个topic来寻找点云数据所在的channel</span></span><br><span class="line">pointcloud_reader_config.channel_name = FLAGS_lidar_16_front_center_topic;</span><br><span class="line">pointcloud_reader_config.pending_queue_size = FLAGS_pointcloud_pending_queue_size;</span><br><span class="line"><span class="comment">// 实例化Reader</span></span><br><span class="line">point_cloud_reader_ = node_-&gt;CreateReader&lt;apollo::drivers::PointCloud&gt;(pointcloud_reader_config, <span class="literal">nullptr</span>);</span><br><span class="line">CHECK(point_cloud_reader_ != <span class="literal">nullptr</span>);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>FLAGS_</code>开头的为<code>gflags</code>库定义的参数，<code>gflags</code>是使用Google的用于处理命令行参数的库，Apollo的代码里广泛运用了该库，大部分模块下都有一个/common文件夹下面有对应的gflags文件，里面定义了该模块使用的参数，使用gflags来配置模块参数的好处是<strong>更改参数后，无需编译，只需要重新启动对应模块，即可应用该参数</strong>。</li>
+<li><code>FLAGS_lidar_16_front_center_topic</code>：16线激光雷达正前方的点云数据所使用的topic名。</li>
+<li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3></li>
+<li><p>velodyne.launch</p>
+<p>  首先，drivers下有一个激光的子模块<code>velodyne</code>，在<code>modules/drivers/velodyne</code>，在其<code>launch/</code>目录下有不同激光雷达的启动文件，由于小车使用的是16线激光雷达，所以需要16线激光雷达的启动文件，<code>velodyne.launch</code>为16线激光雷达的启动文件，该文件指向了一个dag文件<code>velodyne.dag</code>。</p>
+</li>
+<li><p>velodyne.dag</p>
+<p>为了简化操作，只使用激光的正前方的数据，找到<code>#16_front_center</code>，其config里有一个<code>config_file_path</code>属性，指向了对应的配置文件<code>velodyne16_front_center_conf.pb.txt</code>.</p>
+</li>
+<li><p>velodyne16_front_center_conf.pb.txt<br>改文件给出了对应的topic名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convert_channel_name: &quot;/apollo/sensor/lidar16/front/center/PointCloud2&quot;</span><br></pre></td></tr></table></figure>
+<p>而该topic已在<code>/modules/common/adapters/adapters_gflags.cc</code>里定义了参数名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DEFINE_string(lidar_16_front_center_topic,</span><br><span class="line">            &quot;/apollo/sensor/lidar16/front/center/PointCloud2&quot;,</span><br><span class="line">            &quot;front center 16 beam lidar topic name&quot;);</span><br></pre></td></tr></table></figure>
+<p>由于代码的版本不同，可能没有该topic的FLAGS，不过可以直接用其值代替。</p>
+</li>
+</ul>
+<h2 id="获取点云数据"><a href="#获取点云数据" class="headerlink" title="获取点云数据"></a>获取点云数据</h2><h3 id="点云数据格式"><a href="#点云数据格式" class="headerlink" title="点云数据格式"></a>点云数据格式</h3><p>目前控制模块已经订阅了激光模块的点云数据，激光会通过订阅的channel发消息给控制模块，控制模块收到后需要解析该消息。</p>
+<p>消息的格式定义在对应的proto文件里，点云消息的格式在<code>/modules/drivers/proto/pointcloud.proto</code>里，其内容如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">syntax = "proto2";</span><br><span class="line">package apollo.drivers;</span><br><span class="line"></span><br><span class="line">import "modules/common/proto/header.proto";</span><br><span class="line"></span><br><span class="line">message PointXYZIT &#123;</span><br><span class="line">  optional float x = 1 [default = nan];</span><br><span class="line">  optional float y = 2 [default = nan];</span><br><span class="line">  optional float z = 3 [default = nan];</span><br><span class="line">  optional uint32 intensity = 4 [default = 0];</span><br><span class="line">  optional uint64 timestamp = 5 [default = 0];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message PointCloud &#123;</span><br><span class="line">  optional apollo.common.Header header = 1;</span><br><span class="line">  optional string frame_id = 2;</span><br><span class="line">  optional bool is_dense = 3;</span><br><span class="line">  repeated PointXYZIT point = 4;</span><br><span class="line">  optional double measurement_time = 5;</span><br><span class="line">  optional uint32 width = 6;</span><br><span class="line">  optional uint32 height = 7;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>可以看到点云里面有头部<code>header</code>、帧id <code>frame_d</code>、还包括点 <code>point</code></li>
+<li>点的格式为<code>PointXYZIT</code>其包含x、y、z、intensity、timestamp。</li>
+<li>点由<code>repeated</code>修饰，说明point可以重复，有多个，可以当作是点的数组</li>
+</ul>
+<h3 id="获取消息对应属性的数据"><a href="#获取消息对应属性的数据" class="headerlink" title="获取消息对应属性的数据"></a>获取消息对应属性的数据</h3><p>假设收到了激光雷达发来的点云消息<code>msg</code>。</p>
+<ul>
+<li>所有repeated修饰的属性都有大小，可以通过<code>msg-&gt;point_size()</code>来获取点云里点的数量。</li>
+<li>索引点云：msg-&gt;point(i);</li>
+<li>获取点的坐标：msg-&gt;point(i).x();</li>
+</ul>
+<h3 id="获取数据代码"><a href="#获取数据代码" class="headerlink" title="获取数据代码"></a>获取数据代码</h3><p>思路：非常简单的障碍物识别，获取点云数据后，若在小车前进方向某一范围内有点，说明前方有障碍物，点的数量超过一定值后就让小车停下来。</p>
+<p>为了方便调参，将范围的参数（<code>x_min</code>,<code>x_max</code>,…,<code>z_max</code>）全部提取出来放到<code>control_gflags.cc</code>文件里定义，这样就可以很方便的在<code>control.conf</code>文件里面修改了。</p>
+<blockquote>
+<p>注意：小车的正前方为为x的正方向、左方为y的正方向、上方为Z的正方向。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开始监听channel上的数据</span></span><br><span class="line">point_cloud_reader_-&gt;Observe();</span><br><span class="line"><span class="comment">// 获取最近收到的数据</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> &amp;point_cloud_msg = point_cloud_reader_-&gt;GetLatestObserverd();</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> point_num = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>( <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; point_cloud_msg-&gt;point_size(); ++i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">float</span> x = point_cloud_msg-&gt;point(i).x();</span><br><span class="line">  <span class="keyword">float</span> y = point_cloud_msg-&gt;point(i).y();</span><br><span class="line">  <span class="keyword">float</span> z = point_cloud_msg-&gt;point(i).z();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>( x &gt; FLAGS_x_min &amp;&amp; x &lt; FLAGS_x_max &amp;&amp; y &gt; FLAGS_y_min &amp;&amp; </span><br><span class="line">      y &lt; FLAGS_y_max &amp;&amp; z &gt; FLAGS_z_min &amp;&amp; z &lt; FLAGS_z_max)&#123;</span><br><span class="line">    point_num++;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(point_num&gt;<span class="number">20</span>)&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt; <span class="string">"Obstacle detected. set vehicle speed to zero."</span>&lt;&lt;<span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 设置车速为0</span></span><br><span class="line">    control_command.set_speed(<span class="number">0.0</span>);</span><br><span class="line">    <span class="comment">// 设置车的角速度为0</span></span><br><span class="line">    control_command.set_angular_velocity(<span class="number">0.0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>到此，代码就完成了。<br>将代码编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash apollo.sh build</span><br></pre></td></tr></table></figure></p>
+<p>编译通过后就可以上车测试了。</p>
+<h1 id="仿真测试"><a href="#仿真测试" class="headerlink" title="仿真测试"></a>仿真测试</h1><p>若没有小车进行实测，可以先用录制的bag数据进行仿真测试。</p>
+<ul>
+<li><p>播放数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyber_recorder play -f /data/bag/test.00000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动控制模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyber_launch modules/control/launch/control.launch</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash control.sh start_fe</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>注意：AINFO/ADEBUG打印输出的内容在控制台上看不到，需要用std::cout打印输出。由于没有和小车相连，对应的车地盘数据获取不到，会出现<code>chassis msg not ready</code>的错误信息，这不影响。</p>
+</blockquote>
+<h1 id="上车测试"><a href="#上车测试" class="headerlink" title="上车测试"></a>上车测试</h1><ul>
+<li>首先录制一条小车运行的轨迹</li>
+<li>让小车自己跑起来，测试小车会不会在遇到障碍物后停下来</li>
+</ul>
+<blockquote>
+<p>注意：这里可以用仿真测试里的命令行的形式启动control模块，而不是在dreamview里打开control模块的开关，这样可以方便查看控制台日志信息。</p>
+</blockquote>
+<h1 id="实操效果"><a href="#实操效果" class="headerlink" title="实操效果"></a>实操效果</h1><video width="100%" height="400" src="/images/obstacle-detection-test.mp4" controls="controls">
 The `<video>` tag is not supported by your browser.
 </video>
 </video>
@@ -418,6 +509,12 @@ The `<video>` tag is not supported by your browser.
             <a href="/tags/Lidar/" rel="tag"># Lidar</a>
           
             <a href="/tags/Obstacle-Detection/" rel="tag"># Obstacle Detection</a>
+          
+            <a href="/tags/protobuf/" rel="tag"># protobuf</a>
+          
+            <a href="/tags/Cyber-RT/" rel="tag"># Cyber RT</a>
+          
+            <a href="/tags/gflags/" rel="tag"># gflags</a>
           
         </div>
       
@@ -500,8 +597,17 @@ The `<video>` tag is not supported by your browser.
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -540,7 +646,7 @@ The `<video>` tag is not supported by your browser.
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -579,6 +685,22 @@ The `<video>` tag is not supported by your browser.
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cyber-RT"><span class="nav-number">1.</span> <span class="nav-text">Cyber RT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Apollo-代码结构"><span class="nav-number">2.</span> <span class="nav-text">Apollo 代码结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整体框架"><span class="nav-number">2.1.</span> <span class="nav-text">整体框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块的结构"><span class="nav-number">2.2.</span> <span class="nav-text">模块的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#launch"><span class="nav-number">2.2.1.</span> <span class="nav-text">/launch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dag"><span class="nav-number">2.2.2.</span> <span class="nav-text">/dag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proto"><span class="nav-number">2.2.3.</span> <span class="nav-text">/proto</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conf"><span class="nav-number">2.2.4.</span> <span class="nav-text">/conf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码编写"><span class="nav-number">3.</span> <span class="nav-text">代码编写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#修改control-Build文件"><span class="nav-number">3.1.</span> <span class="nav-text">修改control/Build文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化PointCloud-Reader"><span class="nav-number">3.2.</span> <span class="nav-text">初始化PointCloud Reader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何找到对应的topic名呢？"><span class="nav-number">3.2.1.</span> <span class="nav-text">如何找到对应的topic名呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取点云数据"><span class="nav-number">3.3.</span> <span class="nav-text">获取点云数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#点云数据格式"><span class="nav-number">3.3.1.</span> <span class="nav-text">点云数据格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取消息对应属性的数据"><span class="nav-number">3.3.2.</span> <span class="nav-text">获取消息对应属性的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数据代码"><span class="nav-number">3.3.3.</span> <span class="nav-text">获取数据代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#仿真测试"><span class="nav-number">4.</span> <span class="nav-text">仿真测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上车测试"><span class="nav-number">5.</span> <span class="nav-text">上车测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实操效果"><span class="nav-number">6.</span> <span class="nav-text">实操效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
