@@ -390,10 +390,88 @@
           
             <h1 id="Cyber-RT"><a href="#Cyber-RT" class="headerlink" title="Cyber RT"></a>Cyber RT</h1><p>Apollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：</p>
 <ul>
-<li>实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。</li>
-<li>确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber RT将任务调度从内核空间移至用户空间，调度可以与算法逻辑密切结合。</li>
+<li><strong>实时性高，时延小</strong>：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。</li>
+<li><strong>调度确定性</strong>：ROS的任务调度具有不确定性，完全取决于系统，而Cyber RT将任务调度从内核空间移至用户空间，调度可以与算法逻辑密切结合。</li>
 </ul>
-<h1 id="Apollo-代码结构"><a href="#Apollo-代码结构" class="headerlink" title="Apollo 代码结构"></a>Apollo 代码结构</h1><h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p>(Apollo 5.0 Github 开源代码)[<a href="https://github.com/ApolloAuto/apollo/tree/r5.0.0" target="_blank" rel="noopener">https://github.com/ApolloAuto/apollo/tree/r5.0.0</a>]</p>
+<h2 id="Cyber-RT-vs-ROS"><a href="#Cyber-RT-vs-ROS" class="headerlink" title="Cyber RT vs ROS"></a>Cyber RT vs ROS</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Cyber RT</th>
+<th>ROS</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Component</td>
+<td>无</td>
+<td>组件之间通过 Cyber channel 通信</td>
+</tr>
+<tr>
+<td>Channel</td>
+<td>Topic</td>
+<td>channel 用于管理数据通信，用户可以通过 publish/subscribe 相同的 channel 来通信</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>Node</td>
+<td>每一个模块包含 Node 并通过 Node 来通信。一个模块通过定义 read/write 和/或 service/client 使用不同的通信模式</td>
+</tr>
+<tr>
+<td>Reader/Writer</td>
+<td>Publish/Subscribe</td>
+<td>订阅者模式。往 channel 读写消息的类。 通常作为 Node 主要的消息传输接口</td>
+</tr>
+<tr>
+<td>Service/Client</td>
+<td>Service/Client</td>
+<td>请求/响应模式，支持节点间双向通信</td>
+</tr>
+<tr>
+<td>Message</td>
+<td>Message</td>
+<td>Cyber RT 中用于模块间通信的数据单元。其实现基于 protobuf</td>
+</tr>
+<tr>
+<td>Parameter</td>
+<td>Parameter</td>
+<td>Parameter 服务提供全局参数访问接口。该服务基于 service/client 模式</td>
+</tr>
+<tr>
+<td>Record file</td>
+<td>Bag file</td>
+<td>用于记录从 channel 发送或接收的消息。 回放 record file 可以重现之前的操作行为</td>
+</tr>
+<tr>
+<td>Launch file</td>
+<td>Launch file</td>
+<td>提供一种启动模块的便利途径。通过在 launch file 中定义一个或多个 dag 文件，可以同时启动多个 modules</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>无</td>
+<td>异步计算任务</td>
+</tr>
+<tr>
+<td>CRoutine</td>
+<td>无</td>
+<td>协程，优化线程使用与系统资源分配</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>无</td>
+<td>任务调度器，用户空间</td>
+</tr>
+<tr>
+<td>Dag file</td>
+<td>无</td>
+<td>定义模块拓扑结构的配置文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="Apollo-代码结构"><a href="#Apollo-代码结构" class="headerlink" title="Apollo 代码结构"></a>Apollo 代码结构</h1><h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p><a href="https://github.com/ApolloAuto/apollo/tree/r5.0.0" target="_blank" rel="noopener">Apollo 5.0 Github 开源代码</a></p>
 <ul>
 <li><code>/cyber</code>:Baidu研发的Cyber RT系统</li>
 <li><code>/data</code><ul>
@@ -425,13 +503,14 @@
 <li><code>FLAGS_</code>开头的为<code>gflags</code>库定义的参数，<code>gflags</code>是使用Google的用于处理命令行参数的库，Apollo的代码里广泛运用了该库，大部分模块下都有一个/common文件夹下面有对应的gflags文件，里面定义了该模块使用的参数，使用gflags来配置模块参数的好处是<strong>更改参数后，无需编译，只需要重新启动对应模块，即可应用该参数</strong>。</li>
 <li><code>FLAGS_lidar_16_front_center_topic</code>：16线激光雷达正前方的点云数据所使用的topic名。</li>
 <li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3></li>
-<li><p>velodyne.launch</p>
+<li><p><strong>velodyne.launch</strong></p>
 <p>  首先，drivers下有一个激光的子模块<code>velodyne</code>，在<code>modules/drivers/velodyne</code>，在其<code>launch/</code>目录下有不同激光雷达的启动文件，由于小车使用的是16线激光雷达，所以需要16线激光雷达的启动文件，<code>velodyne.launch</code>为16线激光雷达的启动文件，该文件指向了一个dag文件<code>velodyne.dag</code>。</p>
 </li>
-<li><p>velodyne.dag</p>
+<li><p><strong>velodyne.dag</strong></p>
 <p>为了简化操作，只使用激光的正前方的数据，找到<code>#16_front_center</code>，其config里有一个<code>config_file_path</code>属性，指向了对应的配置文件<code>velodyne16_front_center_conf.pb.txt</code>.</p>
 </li>
-<li><p>velodyne16_front_center_conf.pb.txt<br>改文件给出了对应的topic名</p>
+<li><p><strong>velodyne16_front_center_conf.pb.txt</strong></p>
+<p>改文件给出了对应的topic名</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convert_channel_name: &quot;/apollo/sensor/lidar16/front/center/PointCloud2&quot;</span><br></pre></td></tr></table></figure>
 <p>而该topic已在<code>/modules/common/adapters/adapters_gflags.cc</code>里定义了参数名：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DEFINE_string(lidar_16_front_center_topic,</span><br><span class="line">            &quot;/apollo/sensor/lidar16/front/center/PointCloud2&quot;,</span><br><span class="line">            &quot;front center 16 beam lidar topic name&quot;);</span><br></pre></td></tr></table></figure>
@@ -611,18 +690,7 @@ The `<video>` tag is not supported by your browser.
       
         
           
-            <p>cyber_monitor all </p>
-<p>lidar default IP: 192.168.1.201</p>
-<p>test whether connected to lidar:<br><code>ping 192.168.1.201</code><br>or type the ip in browser.</p>
-<p>dag/velodyne.dag</p>
-<p>change configure does not require rebuild</p>
-<p>every module has a launch file<br>`<br>cyber_launch start {launch file}</p>
-<p>the ratio of matrix.q and r</p>
-<p>cyber_luanch module/perception/production/launch perception_lidar.launch</p>
-<p>flag topic:lidar_16_front_center_topic</p>
-<p>modules/perception/obstacle/onboard/lidar_process_suborde.cc 583<br>car_affine.matrix().inverse()</p>
-<p>ROS vs Cyber RT: <a href="https://blog.csdn.net/kesalin/article/details/88914029" target="_blank" rel="noopener">https://blog.csdn.net/kesalin/article/details/88914029</a></p>
-
+            
           
         
       
@@ -2690,7 +2758,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
