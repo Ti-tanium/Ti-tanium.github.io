@@ -48,7 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+  
+
+<link href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
@@ -502,7 +504,9 @@
 <ul>
 <li><code>FLAGS_</code>开头的为<code>gflags</code>库定义的参数，<code>gflags</code>是使用Google的用于处理命令行参数的库，Apollo的代码里广泛运用了该库，大部分模块下都有一个/common文件夹下面有对应的gflags文件，里面定义了该模块使用的参数，使用gflags来配置模块参数的好处是<strong>更改参数后，无需编译，只需要重新启动对应模块，即可应用该参数</strong>。</li>
 <li><code>FLAGS_lidar_16_front_center_topic</code>：16线激光雷达正前方的点云数据所使用的topic名。</li>
-<li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3></li>
+<li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。</li>
+</ul>
+<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3><ul>
 <li><p><strong>velodyne.launch</strong></p>
 <p>  首先，drivers下有一个激光的子模块<code>velodyne</code>，在<code>modules/drivers/velodyne</code>，在其<code>launch/</code>目录下有不同激光雷达的启动文件，由于小车使用的是16线激光雷达，所以需要16线激光雷达的启动文件，<code>velodyne.launch</code>为16线激光雷达的启动文件，该文件指向了一个dag文件<code>velodyne.dag</code>。</p>
 </li>

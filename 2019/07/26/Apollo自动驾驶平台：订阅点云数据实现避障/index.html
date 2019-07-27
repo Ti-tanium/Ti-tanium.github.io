@@ -48,7 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+  
+
+<link href="//cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
@@ -87,7 +89,7 @@
 <meta property="og:site_name" content="Titanium&#39;s Blog">
 <meta property="og:description" content="Cyber RTApollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：  实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。 调度确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-27T09:01:16.090Z">
+<meta property="og:updated_time" content="2019-07-27T09:11:38.087Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apollo自动驾驶平台：订阅点云数据实现避障">
 <meta name="twitter:description" content="Cyber RTApollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：  实时性高，时延小：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。 调度确定性：ROS的任务调度具有不确定性，完全取决于系统，而Cyber">
@@ -503,7 +505,9 @@
 <ul>
 <li><code>FLAGS_</code>开头的为<code>gflags</code>库定义的参数，<code>gflags</code>是使用Google的用于处理命令行参数的库，Apollo的代码里广泛运用了该库，大部分模块下都有一个/common文件夹下面有对应的gflags文件，里面定义了该模块使用的参数，使用gflags来配置模块参数的好处是<strong>更改参数后，无需编译，只需要重新启动对应模块，即可应用该参数</strong>。</li>
 <li><code>FLAGS_lidar_16_front_center_topic</code>：16线激光雷达正前方的点云数据所使用的topic名。</li>
-<li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3></li>
+<li>FLAGS_pointcloud_pending_queue_size为自定义的参数，默认值为10，设置方式参考上面设置<code>x_min</code>的方法。</li>
+</ul>
+<h3 id="如何找到对应的topic名呢？"><a href="#如何找到对应的topic名呢？" class="headerlink" title="如何找到对应的topic名呢？"></a>如何找到对应的topic名呢？</h3><ul>
 <li><p><strong>velodyne.launch</strong></p>
 <p>  首先，drivers下有一个激光的子模块<code>velodyne</code>，在<code>modules/drivers/velodyne</code>，在其<code>launch/</code>目录下有不同激光雷达的启动文件，由于小车使用的是16线激光雷达，所以需要16线激光雷达的启动文件，<code>velodyne.launch</code>为16线激光雷达的启动文件，该文件指向了一个dag文件<code>velodyne.dag</code>。</p>
 </li>
