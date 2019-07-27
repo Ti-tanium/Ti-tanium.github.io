@@ -41,9 +41,9 @@
         <category>Autonomous Driving</category>
       </categories>
       <tags>
-        <tag>Environment Setup</tag>
         <tag>Autonomous Driving</tag>
         <tag>Baidu Apollo</tag>
+        <tag>Environment Setup</tag>
         <tag>Multiple Operating System</tag>
         <tag>Ubantu</tag>
         <tag>Docker</tag>
