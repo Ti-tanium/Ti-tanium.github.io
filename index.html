@@ -390,10 +390,10 @@
       
         
           
-            <h1 id="Cyber-RT"><a href="#Cyber-RT" class="headerlink" title="Cyber RT"></a>Cyber RT</h1><p>Apollo平台的代码在3.5版本及以后完全摒弃了ROS系统，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：</p>
+            <h1 id="Cyber-RT"><a href="#Cyber-RT" class="headerlink" title="Cyber RT"></a>Cyber RT</h1><p>Apollo平台的代码在3.5版本及以后完全摒弃了ROS(Robot Operating System)，而是将整个平台基于Baidu自行研发的Cyber RT系统上。Cyber RT相较于ROS系统有以下优点：</p>
 <ul>
-<li><strong>实时性高，时延小</strong>：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较小，这也是baidu研发Cyber RT的初衷。</li>
-<li><strong>调度确定性</strong>：ROS的任务调度具有不确定性，完全取决于系统，而Cyber RT将任务调度从内核空间移至用户空间，调度可以与算法逻辑密切结合。</li>
+<li><strong>实时性高，时延小</strong>：自动驾驶对于时延的要求十分高，而ROS系统主要针对机器人，其对时延的要求较低，这也是baidu研发Cyber RT的初衷。</li>
+<li><strong>调度确定性</strong>：ROS的任务调度具有不确定性，任务的执行顺序取决于系统，而Cyber RT将任务调度从内核空间移至用户空间，调度可以与算法逻辑密切结合。</li>
 </ul>
 <h2 id="Cyber-RT-vs-ROS"><a href="#Cyber-RT-vs-ROS" class="headerlink" title="Cyber RT vs ROS"></a>Cyber RT vs ROS</h2><div class="table-container">
 <table>
