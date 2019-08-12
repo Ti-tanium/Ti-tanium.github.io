@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
+<meta name="description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
 <meta name="keywords" content="Front-end,HTML&#x2F;CSS,Repaint&amp;Reflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重排与重绘">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/08/12/重排与重绘/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
+<meta property="og:description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
-<meta property="og:updated_time" content="2019-08-12T05:07:06.346Z">
+<meta property="og:updated_time" content="2019-08-12T06:19:16.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重排与重绘">
-<meta name="twitter:description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
+<meta name="twitter:description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
 <meta name="twitter:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
 
 
@@ -404,18 +404,7 @@
       
 
       
-        <style>
-table th:first-of-type {
-    width: 100%;
-table th:nth-of-type(2) {
-    width: 10%;
-}
-table th:nth-of-type(3) {
-    width: 10%;
-}
-</style>
-
-<h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
+        <h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
 <li>解析HTML，生成DOM树，解析CSS，生成CSSOM树</li>
 <li>将DOM树和CSSOM树结合，生成渲染树(Render Tree)</li>
 <li>Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小）</li>
@@ -435,74 +424,8 @@ table th:nth-of-type(3) {
 <li>重排开销比重绘大</li>
 </ul>
 </blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>实例</th>
-<th>重排</th>
-<th>重绘</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>bstyle.padding = &quot;20px&quot;;</code></td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>bstyle.border = &quot;10px solid red&quot;;</code></td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>bstyle.color = &quot;blue&quot;;</code></td>
-<td></td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>bstyle.backgroundColor = &quot;#red&quot;;</code></td>
-<td></td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>bstyle.fontSize = &quot;2em&quot;;</code></td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>document.body.appendChild(document.createTextNode(&#39;dude!&#39;));</code></td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>浏览器尺寸发生改变</td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>元素位置或尺寸发生改变</td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>新增或删除可见元素</td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>激活CSS伪类</td>
-<td>⭐</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td><code>visibility</code>、<code>outline</code>、<code>background-color</code></td>
-<td></td>
-<td>⭐</td>
-</tr>
-</tbody>
-</table>
-</div>
+<p><style type="text/css"><br>table th:first-of-type {<br>    width: 80%;<br>table th:nth-of-type(2) {<br>    width: 10%;<br>}<br>table th:nth-of-type(3) {<br>    width: 10%;<br>}
+</style><br>|实例|重排|重绘|<br>|—-|——|——|<br>|<code>bstyle.padding = &quot;20px&quot;;</code>|⭐|⭐|<br>|<code>bstyle.border = &quot;10px solid red&quot;;</code>|⭐|⭐|<br>|<code>bstyle.color = &quot;blue&quot;;</code>| |⭐|<br>|<code>bstyle.backgroundColor = &quot;#red&quot;;</code>| |⭐|<br>|<code>bstyle.fontSize = &quot;2em&quot;;</code>|⭐|⭐|<br>|<code>document.body.appendChild(document.createTextNode(&#39;dude!&#39;));</code>|⭐|⭐|<br>|浏览器尺寸发生改变|⭐|⭐|<br>|元素位置或尺寸发生改变|⭐|⭐|<br>|新增或删除可见元素|⭐|⭐|<br>|激活CSS伪类|⭐|⭐|<br>|<code>visibility</code>、<code>outline</code>、<code>background-color</code>| |⭐|</p>
 <h1 id="最小化重排重绘"><a href="#最小化重排重绘" class="headerlink" title="最小化重排重绘"></a>最小化重排重绘</h1><h2 id="浏览器的优化"><a href="#浏览器的优化" class="headerlink" title="浏览器的优化"></a>浏览器的优化</h2><p>浏览器会基于你的脚本要求创建一个变化的队列，然后分批去展现。通过这种方式许多需要一次重排的变化就会整合起来，最终只有一次重排会被计算渲染。浏览器可以向已有的队列中添加变更并在一个特定的时间或达到一个特定数量的变更后执行。</p>
 <p>但是当程序员在代码中，需要直接获取样式信息时，为了提供最新的样式信息，浏览器被迫刷新队列，这时会引发一次重排重绘。</p>
 <h2 id="优化方法"><a href="#优化方法" class="headerlink" title="优化方法"></a>优化方法</h2><ul>
