@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
+<meta name="description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
 <meta name="keywords" content="Front-end,HTML&#x2F;CSS,Repaint&amp;Reflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重排与重绘">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/08/12/重排与重绘/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
+<meta property="og:description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
-<meta property="og:updated_time" content="2019-08-12T04:54:34.946Z">
+<meta property="og:updated_time" content="2019-08-12T05:00:02.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重排与重绘">
-<meta name="twitter:description" content="浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比">
+<meta name="twitter:description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
 <meta name="twitter:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
 
 
@@ -404,7 +404,19 @@
       
 
       
-        <h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
+        <style>
+table th:first-of-type {  #first表示表格第一列
+    width: 100%; # 可使用%比例
+}
+table th:second-of-type {  #first表示表格第一列
+    width: 10%; # 可使用%比例
+}
+table th:third-of-type {  #first表示表格第一列
+    width: 10%; # 可使用%比例
+}
+</style>
+
+<h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
 <li>解析HTML，生成DOM树，解析CSS，生成CSSOM树</li>
 <li>将DOM树和CSSOM树结合，生成渲染树(Render Tree)</li>
 <li>Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小）</li>

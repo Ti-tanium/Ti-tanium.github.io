@@ -401,7 +401,19 @@
       
         
           
-            <h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
+            <style>
+table th:first-of-type {  #first表示表格第一列
+    width: 100%; # 可使用%比例
+}
+table th:second-of-type {  #first表示表格第一列
+    width: 10%; # 可使用%比例
+}
+table th:third-of-type {  #first表示表格第一列
+    width: 10%; # 可使用%比例
+}
+</style>
+
+<h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
 <li>解析HTML，生成DOM树，解析CSS，生成CSSOM树</li>
 <li>将DOM树和CSSOM树结合，生成渲染树(Render Tree)</li>
 <li>Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小）</li>
