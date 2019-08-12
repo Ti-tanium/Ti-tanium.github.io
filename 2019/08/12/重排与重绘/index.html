@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
+<meta name="description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
 <meta name="keywords" content="Front-end,HTML&#x2F;CSS,Repaint&amp;Reflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重排与重绘">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/08/12/重排与重绘/index.html">
 <meta property="og:site_name" content="Titanium&#39;s Blog">
-<meta property="og:description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
+<meta property="og:description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
-<meta property="og:updated_time" content="2019-08-12T05:00:02.893Z">
+<meta property="og:updated_time" content="2019-08-12T05:07:06.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重排与重绘">
-<meta name="twitter:description" content="table th:first-of-type {  #first表示表格第一列     width: 100%; # 可使用%比例 } table th:second-of-type {  #first表示表格第一列     width: 10%; # 可使用%比例 } table th:third-of-type {  #first表示表格第一列     width: 10%; # 可使用%比">
+<meta name="twitter:description" content="table th:first-of-type {     width: 100%; table th:nth-of-type(2) {     width: 10%; } table th:nth-of-type(3) {     width: 10%; }   浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tr">
 <meta name="twitter:image" content="https://ti-tanium.github.io/images/browser-render.jpg">
 
 
@@ -405,14 +405,13 @@
 
       
         <style>
-table th:first-of-type {  #first表示表格第一列
-    width: 100%; # 可使用%比例
+table th:first-of-type {
+    width: 100%;
+table th:nth-of-type(2) {
+    width: 10%;
 }
-table th:second-of-type {  #first表示表格第一列
-    width: 10%; # 可使用%比例
-}
-table th:third-of-type {  #first表示表格第一列
-    width: 10%; # 可使用%比例
+table th:nth-of-type(3) {
+    width: 10%;
 }
 </style>
 
