@@ -441,10 +441,54 @@
 <td>⭐</td>
 <td>⭐</td>
 </tr>
+<tr>
+<td><code>bstyle.color = &quot;blue&quot;;</code></td>
+<td></td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><code>bstyle.backgroundColor = &quot;#red&quot;;</code></td>
+<td></td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><code>bstyle.fontSize = &quot;2em&quot;;</code></td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><code>document.body.appendChild(document.createTextNode(&#39;dude!&#39;));</code></td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>浏览器尺寸发生改变</td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>元素位置或尺寸发生改变</td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>新增或删除可见元素</td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>激活CSS伪类</td>
+<td>⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><code>visibility</code>、<code>outline</code>、<code>background-color</code></td>
+<td></td>
+<td>⭐</td>
+</tr>
 </tbody>
 </table>
 </div>
-<p><code>bstyle.color = &quot;blue&quot;;</code>| |⭐|<br><code>bstyle.backgroundColor = &quot;#red&quot;;</code>| |⭐|<br><code>bstyle.fontSize = &quot;2em&quot;;</code>|⭐|⭐|<br><code>document.body.appendChild(document.createTextNode(&#39;dude!&#39;));</code>|⭐|⭐|<br>浏览器尺寸发生改变|⭐|⭐|<br>元素位置或尺寸发生改变|⭐|⭐|<br>新增或删除可见元素|⭐|⭐|<br>激活CSS伪类|⭐|⭐|<br><code>visibility</code>、<code>outline</code>、<code>background-color</code>| |⭐|</p>
 <h1 id="最小化重排重绘"><a href="#最小化重排重绘" class="headerlink" title="最小化重排重绘"></a>最小化重排重绘</h1><h2 id="浏览器的优化"><a href="#浏览器的优化" class="headerlink" title="浏览器的优化"></a>浏览器的优化</h2><p>浏览器会基于你的脚本要求创建一个变化的队列，然后分批去展现。通过这种方式许多需要一次重排的变化就会整合起来，最终只有一次重排会被计算渲染。浏览器可以向已有的队列中添加变更并在一个特定的时间或达到一个特定数量的变更后执行。</p>
 <p>但是当程序员在代码中，需要直接获取样式信息时，为了提供最新的样式信息，浏览器被迫刷新队列，这时会引发一次重排重绘。</p>
 <h2 id="优化方法"><a href="#优化方法" class="headerlink" title="优化方法"></a>优化方法</h2><ul>
