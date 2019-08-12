@@ -287,6 +287,229 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/08/12/重排与重绘/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Titanium">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Titanium's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/12/重排与重绘/" itemprop="url">重排与重绘</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-12T11:41:25+08:00">
+                2019-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Front-end/" itemprop="url" rel="index">
+                    <span itemprop="name">Front-end</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Front-end/HTML-CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">HTML/CSS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/12/重排与重绘/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/12/重排与重绘/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h1><ol>
+<li>解析HTML，生成DOM树，解析CSS，生成CSSOM树</li>
+<li>将DOM树和CSSOM树结合，生成渲染树(Render Tree)</li>
+<li>Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小）</li>
+<li>Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素</li>
+<li>Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比如会在GPU将多个合成层合并为同一个层，并展示在页面中。而css3硬件加速的原理则是新建合成层）</li>
+</ol>
+<p><img src="/images/browser-render.jpg" alt="Browser Rendering Process"></p>
+<h1 id="重排与重绘"><a href="#重排与重绘" class="headerlink" title="重排与重绘"></a>重排与重绘</h1><p>任何改变用来构建渲染树的信息都会导致一次重排或重绘。</p>
+<ul>
+<li>重排<br>部分渲染树（或者整个渲染树）需要重新分析并且节点尺寸需要重新计算</li>
+<li>重绘<br>由于节点的几何属性发生改变或者由于样式发生改变，例如改变元素背景色时，屏幕上的部分内容需要更新</li>
+</ul>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>重绘不一定导致重排，重排一定导致重绘</li>
+<li>重排开销比重绘大</li>
+</ul>
+</blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>实例</th>
+<th>重排</th>
+<th>重绘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>bstyle.padding = “20px”;|⭐|⭐<br>bstyle.border = “10px solid red”; |⭐|⭐<br>bstyle.color = “blue”;||⭐<br>bstyle.backgroundColor = “#red”;||⭐<br>bstyle.fontSize = “2em”; |⭐|⭐<br>document.body.appendChild(document.createTextNode(‘dude!’));|⭐|⭐<br>浏览器尺寸发生改变|⭐|⭐<br>元素位置或尺寸发生改变|⭐|⭐<br>新增或删除可见元素|⭐|⭐<br>激活CSS伪类|⭐|⭐<br>visibility、outline、背景色||⭐</p>
+<h1 id="最小化重排重绘"><a href="#最小化重排重绘" class="headerlink" title="最小化重排重绘"></a>最小化重排重绘</h1><h2 id="浏览器的优化"><a href="#浏览器的优化" class="headerlink" title="浏览器的优化"></a>浏览器的优化</h2><p>浏览器会基于你的脚本要求创建一个变化的队列，然后分批去展现。通过这种方式许多需要一次重排的变化就会整合起来，最终只有一次重排会被计算渲染。浏览器可以向已有的队列中添加变更并在一个特定的时间或达到一个特定数量的变更后执行。</p>
+<p>但是当程序员在代码中，需要直接获取样式信息时，为了提供最新的样式信息，浏览器被迫刷新队列，这时会引发一次重排重绘。</p>
+<h2 id="优化方法"><a href="#优化方法" class="headerlink" title="优化方法"></a>优化方法</h2><ul>
+<li><p>不要逐个修改样式，通过<strong>改变类名</strong>或<strong>编辑cssText</strong>方式来修改</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad </span></span><br><span class="line"><span class="keyword">var</span> left = <span class="number">10</span>, top = <span class="number">10</span>; </span><br><span class="line">el.style.left = left + <span class="string">"px"</span>; </span><br><span class="line">el.style.top = top + <span class="string">"px"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// change class name</span></span><br><span class="line">el.className += <span class="string">" theclassname"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// edit cssText</span></span><br><span class="line">el.style.cssText += <span class="string">"; left: "</span> + left + <span class="string">"px; top: "</span> + top + <span class="string">"px;"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改大量属性时，先通过display：none将元素隐藏（触发一次重排），批量修改完属性后再通过display显示出来（触发第二次重排），这样修改大量属性也只触发两次重排。</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">appendDataToElement</span>(<span class="params">appendToElement, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> li;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">	    li = <span class="built_in">document</span>.createElement(<span class="string">'li'</span>);</span><br><span class="line">        li.textContent = <span class="string">'text'</span>;</span><br><span class="line">        appendToElement.appendChild(li);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'list'</span>);</span><br><span class="line">ul.style.display = <span class="string">'none'</span>;</span><br><span class="line">appendDataToElement(ul, data);</span><br><span class="line">ul.style.display = <span class="string">'block'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用文档片段（Document Fragment），构建子树，在子树中修改，完成后再接入DOM中</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'list'</span>);</span><br><span class="line"><span class="keyword">const</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line">appendDataToElement(fragment, data);</span><br><span class="line">ul.appendChild(fragment);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复制要更新的节点，修改节点的副本，修改完成后，再使用副本替换树上的节点。</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'list'</span>);</span><br><span class="line"><span class="keyword">const</span> clone = ul.cloneNode(<span class="literal">true</span>);</span><br><span class="line">appendDataToElement(clone, data);</span><br><span class="line">ul.parentNode.replaceChild(clone, ul);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不要频繁取样式，样式取出来后存在变量里。</p>
+<p>  优化前，每次循环的时候，都读取了box的一个offsetWidth属性值，然后利用它来更新p标签的width属性。这就导致了每一次循环的时候，浏览器都必须先使上一次循环中的样式更新操作生效，才能响应本次循环的样式读取操作。每一次循环都会强制浏览器刷新队列。</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initP</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">        paragraphs[i].style.width = box.offsetWidth + <span class="string">'px'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  优化后</p>
+  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> width = box.offsetWidth;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initP</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">        paragraphs[i].style.width = width + <span class="string">'px'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于多次重排的元素，比如说动画。使用<strong>绝对定位</strong>脱离文档流，使其不影响其他元素。</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/26/Apollo自动驾驶平台：订阅点云数据实现避障/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2559,176 +2782,13 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/05/connect-server-with-jupyter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Titanium">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Titanium's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/05/connect-server-with-jupyter/" itemprop="url">How to access server with Jupyter Notebook</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-05T13:58:11+08:00">
-                2019-07-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Data-Science/" itemprop="url" rel="index">
-                    <span itemprop="name">Data Science</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/05/connect-server-with-jupyter/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/05/connect-server-with-jupyter/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="安装Jupyter"><a href="#安装Jupyter" class="headerlink" title="安装Jupyter"></a>安装Jupyter</h2><p>首先登录服务器，输入<strong>jupyter notebook</strong>检查是否有安装过jupyter。若没有则通过以下指令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install jupyter</span><br></pre></td></tr></table></figure></p>
-<h2 id="生成Jupyter配置文件"><a href="#生成Jupyter配置文件" class="headerlink" title="生成Jupyter配置文件"></a>生成Jupyter配置文件</h2><p>安装完Jupyter之后，输入以下指令生成jupyter配置文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --generate-config</span><br></pre></td></tr></table></figure></p>
-<p>配置文件默认会放置在Writing default config to:/root/.jupyter/jupyter_notebook_config.py</p>
-<h2 id="生成密钥"><a href="#生成密钥" class="headerlink" title="生成密钥"></a>生成密钥</h2><p> 命令行输入ipython。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ipython</span></span><br></pre></td></tr></table></figure></p>
-<p>import passwd包，使用改包生成密钥<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In[<span class="number">1</span>]: <span class="keyword">from</span> notebook.auth <span class="keyword">import</span> passwd</span><br><span class="line">In[<span class="number">2</span>]: passwd()</span><br><span class="line">Enter password: </span><br><span class="line">Verify password: </span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'sha1:0000000000000000000000000000000000000000000000000'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="编辑jupyter配置文件"><a href="#编辑jupyter配置文件" class="headerlink" title="编辑jupyter配置文件"></a>编辑jupyter配置文件</h2><p>输入以下指令，编辑配置文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.jupyter/jupyter_notebook_config.py</span><br></pre></td></tr></table></figure></p>
-<p>按<strong><em>i</em></strong>进入编辑模式<br>该文件的所有配置初始时都是被注释的。需要修改以下的配置，将每一行配置前的<strong>＃</strong>去掉<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">c.NotebookApp.allow_remote_access = <span class="literal">True</span></span><br><span class="line">c.NotebookApp.allow_root = <span class="literal">True</span>   <span class="comment">## 表示是否允许jupyter使用root权限</span></span><br><span class="line">c.NotebookApp.ip = <span class="string">'*'</span></span><br><span class="line">c.NotebookApp.port = <span class="number">8888</span>  <span class="comment">##根据自己情况指定</span></span><br><span class="line">c.NotebookApp.open_browser = <span class="literal">False</span></span><br><span class="line">c.NotebookApp.password = <span class="string">u'sha1:00000000....'</span> <span class="comment">## 刚刚设置密码时生成的密钥</span></span><br></pre></td></tr></table></figure></p>
-<p>编辑完成后按<strong><em>esc</em></strong>退出编辑模式，输入‘:wq’退出编辑。</p>
-<h2 id="后台运行jupyter-后台运行参考"><a href="#后台运行jupyter-后台运行参考" class="headerlink" title="后台运行jupyter[后台运行参考]"></a>后台运行jupyter[<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-nohup/" target="_blank" rel="noopener">后台运行参考</a>]</h2><p>完成以上步骤以后，只需要在后台将jupyter运行起来就OK啦：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup jupyter notebook &amp;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Note: 注意以上运行jupter指令所在的目录，该目录会作为访问时的根目录。</p>
-</blockquote>
-<p>这时当前目录下会生成一个nohup.out文件，运行jupyter notebook的所有标准输出都会重定向至该文件内。可使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br></pre></td></tr></table></figure></p>
-<p>查看后台作业的情况。<br>若目录不正确可以使用kill中止掉后台进程，进入到期望的目录下后再次运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill %使用jobs查询到的作业代号</span><br></pre></td></tr></table></figure></p>
-<h2 id="访问远程服务器的Jupyter"><a href="#访问远程服务器的Jupyter" class="headerlink" title="访问远程服务器的Jupyter"></a>访问远程服务器的Jupyter</h2><p>在自己的浏览器上输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">服务器ip:端口号</span><br></pre></td></tr></table></figure></p>
-<p>即可进入jupyter的登录页面，如下所示<br><img src="/images/jupyter-login.png" alt="image.png"><br>接下来输入刚刚设置的密码，即可通过jupyter访问服务器啦！</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -2774,7 +2834,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2796,7 +2856,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
