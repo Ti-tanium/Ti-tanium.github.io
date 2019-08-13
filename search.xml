@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[JSONP简介]]></title>
+    <url>%2F2019%2F08%2F13%2FJSONP%E7%AE%80%E4%BB%8B%2F</url>
+    <content type="text"><![CDATA[JSONPJSONP(JSON with padding) 是一种跨域访问的机制。 跨域访问定义：跨域是指从一个域名的网页去请求另一个域名的资源。比如从http://www.baidu.com/ 页面去请求 http://www.google.com 的资源。跨域的严格一点的定义是：只要 协议，域名，端口有任何一个的不同，就被当作是跨域。 跨站攻击传统上，浏览器的实现禁止 XMLHttpRequest 请求跨域访问，因为这样会引发安全问题，如跨站攻击。跨站攻击例： A网站通过以下请求发帖：http://example.com/bbs/create_post.php?title=标题&amp;content=内容 若Attacker在B网站发帖包含以下链接：http://example.com/bbs/create_post.php?title=我是脑残&amp;content=哈哈 则只要在B网站点了以上链接的victim，都会不知情的发帖。由于example网站保存了cookie，因此有victim的authentication 跨域使用场景有时公司内部有多个不同的子域，比如一个是location.company.com，而应用是放在app.company.com , 这时想从 app.company.com去访问 location.company.com 的资源就属于跨域。 如何跨域首先，要知道HTML中的&lt;script&gt;、&lt;img&gt; 标签的src属性是可以跨域访问的。JSONP正是利用了这一点进行跨域访问。 为了便于客户端使用数据，逐渐形成了一种非正式传输协议，人们把它称作JSONP，该协议的一个要点就是允许用户传递一个callback参数给服务端，然后服务端返回数据时会将这个callback参数作为函数名来包裹住JSON数据，这样客户端就可以随意定制自己的函数来自动处理返回数据了。 简单实现 客户端 123456789101112131415161718192021222324&lt;!DOCTYPE html&gt;&lt;html&gt; &lt;head&gt; &lt;title&gt;&lt;/title&gt; &lt;script type="text/javascript"&gt; // 得到航班信息查询结果后的回调函数 var flightHandler = function(data)&#123; alert('你查询的航班结果是：票价 ' + data.price + ' 元，' + '余票 ' + data.tickets + ' 张。'); &#125;; //把callback函数赋给window对象，供script回调 window.flightHandler = flightHandler; // 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码） var url = "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler"; // 创建script标签，设置其属性 var script = document.createElement('script'); script.setAttribute('src', url); // 把script标签加入head，此时调用开始 document.getElementsByTagName('head')[0].appendChild(script); &lt;/script&gt; &lt;/head&gt; &lt;body&gt;&lt;/body&gt;&lt;/html&gt; 服务器 1234567891011121314151617181920var http = require('http');var urllib = require('url');var port = 8080;var data = &#123;'data':'world'&#125;;http.createServer(function(req,res)&#123; var params = urllib.parse(req.url,true); if(params.query.callback)&#123; console.log(params.query.callback); //jsonp var str = params.query.callback + '(' + JSON.stringify(data) + ')'; res.end(str); &#125; else &#123; res.end(); &#125; &#125;).listen(port,function()&#123; console.log('jsonp server is on');&#125;); JQuery实现$.getJSON123$.getJSON("http://crossdomain.com/services.php?callback=?", function(json)&#123; alert('您查询到航班信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。');&#125;); $.ajax12345678910111213$.ajax(&#123; type: "get", url: "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998", dataType: "jsonp", jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback) jsonpCallback:"flightHandler",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写"?"，jQuery会自动为你处理数据 success: function(json)&#123; alert('您查询到航班信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。'); &#125;, error: function()&#123; alert('fail'); &#125; &#125;); AngularJS实现123456$http.jsonp('https://public-api.wordpress.com/rest/v1/sites/wtmpeachtest.wordpress.com/posts?callback=JSON_CALLBACK') .success(function(data)&#123; alert('success:'+data); &#125;).error(function(err)&#123; alert('error:'+err); &#125;);]]></content>
+      <categories>
+        <category>Front-end</category>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>Front-end</tag>
+        <tag>Javascript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[重排与重绘]]></title>
     <url>%2F2019%2F08%2F12%2F%E9%87%8D%E6%8E%92%E4%B8%8E%E9%87%8D%E7%BB%98%2F</url>
     <content type="text"><![CDATA[浏览器渲染过程 解析HTML，生成DOM树，解析CSS，生成CSSOM树 将DOM树和CSSOM树结合，生成渲染树(Render Tree) Layout(排布):根据生成的渲染树，进行排布(Layout)，得到节点的几何信息（位置，大小） Painting(绘制):根据渲染树以及排布得到的几何信息，得到节点的绝对像素 Display:将像素发送给GPU，展示在页面上。（这一步其实还有很多内容，比如会在GPU将多个合成层合并为同一个层，并展示在页面中。而css3硬件加速的原理则是新建合成层） 重排与重绘任何改变用来构建渲染树的信息都会导致一次重排或重绘。 重排部分渲染树（或者整个渲染树）需要重新分析并且节点尺寸需要重新计算 重绘由于节点的几何属性发生改变或者由于样式发生改变，例如改变元素背景色时，屏幕上的部分内容需要更新 注意： 重绘不一定导致重排，重排一定导致重绘 重排开销比重绘大 实例 重排 重绘 bstyle.padding = &quot;20px&quot;; ⭐ ⭐ bstyle.border = &quot;10px solid red&quot;; ⭐ ⭐ bstyle.color = &quot;blue&quot;; ⭐ bstyle.backgroundColor = &quot;#red&quot;; ⭐ bstyle.fontSize = &quot;2em&quot;; ⭐ ⭐ document.body.appendChild(document.createTextNode(&#39;dude!&#39;)); ⭐ ⭐ 浏览器尺寸发生改变 ⭐ ⭐ 元素位置或尺寸发生改变 ⭐ ⭐ 新增或删除可见元素 ⭐ ⭐ 激活CSS伪类 ⭐ ⭐ visibility、outline、background-color ⭐ 最小化重排重绘浏览器的优化浏览器会基于你的脚本要求创建一个变化的队列，然后分批去展现。通过这种方式许多需要一次重排的变化就会整合起来，最终只有一次重排会被计算渲染。浏览器可以向已有的队列中添加变更并在一个特定的时间或达到一个特定数量的变更后执行。 但是当程序员在代码中，需要直接获取样式信息时，为了提供最新的样式信息，浏览器被迫刷新队列，这时会引发一次重排重绘。 优化方法 不要逐个修改样式，通过改变类名或编辑cssText方式来修改 12345678910// bad var left = 10, top = 10; el.style.left = left + "px"; el.style.top = top + "px";// change class nameel.className += " theclassname";// edit cssTextel.style.cssText += "; left: " + left + "px; top: " + top + "px;"; 修改大量属性时，先通过display：none将元素隐藏（触发一次重排），批量修改完属性后再通过display显示出来（触发第二次重排），这样修改大量属性也只触发两次重排。 123456789101112function appendDataToElement(appendToElement, data) &#123; let li; for (let i = 0; i &lt; data.length; i++) &#123; li = document.createElement('li'); li.textContent = 'text'; appendToElement.appendChild(li); &#125;&#125;const ul = document.getElementById('list');ul.style.display = 'none';appendDataToElement(ul, data);ul.style.display = 'block'; 使用文档片段（Document Fragment），构建子树，在子树中修改，完成后再接入DOM中 1234const ul = document.getElementById('list');const fragment = document.createDocumentFragment();appendDataToElement(fragment, data);ul.appendChild(fragment); 复制要更新的节点，修改节点的副本，修改完成后，再使用副本替换树上的节点。 1234const ul = document.getElementById('list');const clone = ul.cloneNode(true);appendDataToElement(clone, data);ul.parentNode.replaceChild(clone, ul); 不要频繁取样式，样式取出来后存在变量里。 优化前，每次循环的时候，都读取了box的一个offsetWidth属性值，然后利用它来更新p标签的width属性。这就导致了每一次循环的时候，浏览器都必须先使上一次循环中的样式更新操作生效，才能响应本次循环的样式读取操作。每一次循环都会强制浏览器刷新队列。 12345function initP() &#123; for (let i = 0; i &lt; paragraphs.length; i++) &#123; paragraphs[i].style.width = box.offsetWidth + 'px'; &#125;&#125; 优化后 123456const width = box.offsetWidth;function initP() &#123; for (let i = 0; i &lt; paragraphs.length; i++) &#123; paragraphs[i].style.width = width + 'px'; &#125;&#125; 对于多次重排的元素，比如说动画。使用绝对定位脱离文档流，使其不影响其他元素。]]></content>
@@ -10,7 +23,8 @@
       </categories>
       <tags>
         <tag>Front-end</tag>
-        <tag>HTML/CSS</tag>
+        <tag>CSS</tag>
+        <tag>Browser Rendering</tag>
         <tag>Repaint&amp;Reflow</tag>
       </tags>
   </entry>
@@ -85,8 +99,8 @@
         <category>HTML/CSS</category>
       </categories>
       <tags>
-        <tag>CSS</tag>
         <tag>Front-end</tag>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>

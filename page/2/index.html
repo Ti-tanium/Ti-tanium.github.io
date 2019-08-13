@@ -287,6 +287,172 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/06/Pascal-VOC-数据集格式详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Titanium">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Titanium's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/06/Pascal-VOC-数据集格式详解/" itemprop="url">Pascal VOC 数据集格式详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-06T16:01:14+08:00">
+                2019-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Computer-Vision/" itemprop="url" rel="index">
+                    <span itemprop="name">Computer Vision</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/06/Pascal-VOC-数据集格式详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/06/Pascal-VOC-数据集格式详解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Pascal Voc 格式是目标检测常用的格式。<a href="http://host.robots.ox.ac.uk/pascal/VOC/" target="_blank" rel="noopener">Pascal Voc 数据集官网</a></p>
+<h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><p>PASCAL VOC数据集由5个部分构成：JPEGImages，Annotations，ImageSets，SegmentationClass以及SegmentationObject。</p>
+<ul>
+<li><strong>JPEGImages</strong>：存放的是训练与测试的所有图片。</li>
+<li><strong>Annotations</strong>：里面存放的是每张图片打完标签所对应的XML文件</li>
+<li><strong>ImageSets</strong>：ImageSets文件夹下本次讨论的只有Main文件夹，此文件夹中存放的主要又有四个文本文件<strong>test.txt</strong>,<strong>train.txt</strong>,<strong>trainval.txt</strong>,<strong>val.txt</strong>,其中分别存放的是<strong>测试集</strong>图片的文件名、<strong>训练集</strong>图片的文件名、<strong>训练验证集</strong>图片的文件名、<strong>验证集</strong>图片的文件名。</li>
+<li><strong>SegmentationClass与SegmentationObject</strong>：存放的都是图片，且都是图像分割结果图，对目标检测任务来说没有用。<strong>class segmentation</strong> 标注出每一个像素的类别 。<strong>object segmentation</strong> 标注出每一个像素属于哪一个物体 </li>
+</ul>
+<h1 id="Annotation的Xml格式"><a href="#Annotation的Xml格式" class="headerlink" title="Annotation的Xml格式"></a>Annotation的Xml格式</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">annotation</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">folder</span>&gt;</span>17<span class="tag">&lt;/<span class="name">folder</span>&gt;</span> # 图片所处文件夹</span><br><span class="line">  <span class="tag">&lt;<span class="name">filename</span>&gt;</span>77258.bmp<span class="tag">&lt;/<span class="name">filename</span>&gt;</span> # 图片名</span><br><span class="line">  <span class="tag">&lt;<span class="name">path</span>&gt;</span>~/frcnn-image/61/ADAS/image/frcnn-image/17/77258.bmp<span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span>&gt;</span>  #图片来源相关信息</span><br><span class="line">    <span class="tag">&lt;<span class="name">database</span>&gt;</span>Unknown<span class="tag">&lt;/<span class="name">database</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">size</span>&gt;</span> #图片尺寸</span><br><span class="line">    <span class="tag">&lt;<span class="name">width</span>&gt;</span>640<span class="tag">&lt;/<span class="name">width</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">height</span>&gt;</span>480<span class="tag">&lt;/<span class="name">height</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">depth</span>&gt;</span>3<span class="tag">&lt;/<span class="name">depth</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">size</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">segmented</span>&gt;</span>0<span class="tag">&lt;/<span class="name">segmented</span>&gt;</span>  #是否有分割label</span><br><span class="line">  <span class="tag">&lt;<span class="name">object</span>&gt;</span> 包含的物体</span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>car<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  #物体类别</span><br><span class="line">    <span class="tag">&lt;<span class="name">pose</span>&gt;</span>Unspecified<span class="tag">&lt;/<span class="name">pose</span>&gt;</span>  #物体的姿态</span><br><span class="line">    <span class="tag">&lt;<span class="name">truncated</span>&gt;</span>0<span class="tag">&lt;/<span class="name">truncated</span>&gt;</span>  #物体是否被部分遮挡（&gt;15%）</span><br><span class="line">    <span class="tag">&lt;<span class="name">difficult</span>&gt;</span>0<span class="tag">&lt;/<span class="name">difficult</span>&gt;</span>  #是否为难以辨识的物体， 主要指要结体背景才能判断出类别的物体。虽有标注， 但一般忽略这类物体</span><br><span class="line">    <span class="tag">&lt;<span class="name">bndbox</span>&gt;</span>  #物体的bound box</span><br><span class="line">      <span class="tag">&lt;<span class="name">xmin</span>&gt;</span>2<span class="tag">&lt;/<span class="name">xmin</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">ymin</span>&gt;</span>156<span class="tag">&lt;/<span class="name">ymin</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">xmax</span>&gt;</span>111<span class="tag">&lt;/<span class="name">xmax</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">ymax</span>&gt;</span>259<span class="tag">&lt;/<span class="name">ymax</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bndbox</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">annotation</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="LabelImg"><a href="#LabelImg" class="headerlink" title="LabelImg"></a><a href="https://github.com/tzutalin/labelImg" target="_blank" rel="noopener">LabelImg</a></h1><p>用于对图片打标签的软件，可以生成Pascal Voc格式的Xml文件。<a href="https://pan.baidu.com/s/1l2AZXDpqxYTu3_T2trRr1w" target="_blank" rel="noopener">LabelImg百度云下载链接</a>。<br><img src="/images/labelImg-interface.png" alt="labelImg.png"></p>
+<h1 id="制作Pascal-VOC格式的数据集"><a href="#制作Pascal-VOC格式的数据集" class="headerlink" title="制作Pascal VOC格式的数据集"></a>制作Pascal VOC格式的数据集</h1><ol>
+<li>爬取数据集图片放置于JPEGImages文件夹下，注意文件命名（按顺序递增）。</li>
+<li>使用LabelImg进行标注，获取对应图片的XML标注文件，放置于Annotations文件夹下。</li>
+<li>运行如下代码生成ImageSets文件夹<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Time    : 2018/11/12 13:03</span></span><br><span class="line"><span class="comment"># @Author  : lazerliu</span></span><br><span class="line"><span class="comment"># @File    : xml2voc.py</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># ==================可能需要修改的地方=====================================#</span></span><br><span class="line">g_root_path = <span class="string">"D:/VOCdevkit/VOC2007/"</span> <span class="comment">#根路径</span></span><br><span class="line">xmlfilepath = <span class="string">"Annotations"</span>  <span class="comment"># 标注文件存放路径</span></span><br><span class="line">saveBasePath = <span class="string">"ImageSets/Main/"</span>  <span class="comment"># ImageSets信息生成路径</span></span><br><span class="line">trainval_percent = <span class="number">0.98</span></span><br><span class="line">train_percent = <span class="number">0.98</span></span><br><span class="line"><span class="comment"># ==================可能需要修改的地方=====================================#</span></span><br><span class="line"></span><br><span class="line">os.chdir(g_root_path)</span><br><span class="line">total_xml = os.listdir(xmlfilepath)</span><br><span class="line">num = len(total_xml)</span><br><span class="line">xml_list = range(num)</span><br><span class="line">tv = int(num * trainval_percent)</span><br><span class="line">tr = int(tv * train_percent)</span><br><span class="line">trainval = random.sample(xml_list, tv)</span><br><span class="line">train = random.sample(trainval, tr)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"train and val size"</span>, tv)</span><br><span class="line">print(<span class="string">"train  size"</span>, tr)</span><br><span class="line">ftrainval = open(saveBasePath + <span class="string">"trainval.txt"</span>, <span class="string">"w"</span>)</span><br><span class="line">ftest = open(saveBasePath + <span class="string">"test.txt"</span>, <span class="string">"w"</span>)</span><br><span class="line">ftrain = open(saveBasePath + <span class="string">"train.txt"</span>, <span class="string">"w"</span>)</span><br><span class="line">fval = open(saveBasePath + <span class="string">"val.txt"</span>, <span class="string">"w"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xml_list:</span><br><span class="line">    name = total_xml[i][:<span class="number">-4</span>] + <span class="string">"\n"</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">in</span> trainval:</span><br><span class="line">        ftrainval.write(name)</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> train:</span><br><span class="line">            ftrain.write(name)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            fval.write(name)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ftest.write(name)</span><br><span class="line"></span><br><span class="line">ftrainval.close()</span><br><span class="line">ftrain.close()</span><br><span class="line">fval.close()</span><br><span class="line">ftest.close()</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ti-tanium.github.io/2019/07/05/connect-server-with-jupyter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -493,7 +659,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
