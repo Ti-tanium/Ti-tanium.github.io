@@ -418,7 +418,7 @@
 </ul>
 <h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><ul>
 <li><p>客户端</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 得到航班信息查询结果后的回调函数</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> flightHandler = <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">          alert(<span class="string">'你查询的航班结果是：票价 '</span> + data.price + <span class="string">' 元，'</span> + <span class="string">'余票 '</span> + data.tickets + <span class="string">' 张。'</span>);</span></span><br><span class="line">      &#125;;</span><br><span class="line"><span class="javascript">      <span class="comment">//把callback函数赋给window对象，供script回调   </span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">window</span>.flightHandler = flightHandler;</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="comment">// 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> url = <span class="string">"http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler"</span>;</span></span><br><span class="line">      </span><br><span class="line"><span class="javascript">      <span class="comment">// 创建script标签，设置其属性</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span></span><br><span class="line"><span class="javascript">      script.setAttribute(<span class="string">'src'</span>, url);</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 把script标签加入head，此时调用开始</span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>].appendChild(script); </span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line">      // 得到航班信息查询结果后的回调函数</span><br><span class="line">      var flightHandler = function(data)&#123;</span><br><span class="line">          alert('你查询的航班结果是：票价 ' + data.price + ' 元，' + '余票 ' + data.tickets + ' 张。');</span><br><span class="line">      &#125;;</span><br><span class="line">      //把callback函数赋给window对象，供script回调   </span><br><span class="line">      window.flightHandler = flightHandler;</span><br><span class="line"></span><br><span class="line">      // 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）</span><br><span class="line">      var url = "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler";</span><br><span class="line">      </span><br><span class="line">      // 创建script标签，设置其属性</span><br><span class="line">      var script = document.createElement('script');</span><br><span class="line">      script.setAttribute('src', url);</span><br><span class="line">      // 把script标签加入head，此时调用开始</span><br><span class="line">      document.getElementsByTagName('head')[0].appendChild(script); </span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>服务器</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> urllib = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> port = <span class="number">8080</span>;</span><br><span class="line"><span class="keyword">var</span> data = &#123;<span class="string">'data'</span>:<span class="string">'world'</span>&#125;;</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> params = urllib.parse(req.url,<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span>(params.query.callback)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(params.query.callback);</span><br><span class="line">        <span class="comment">//jsonp</span></span><br><span class="line">        <span class="keyword">var</span> str = params.query.callback + <span class="string">'('</span> + <span class="built_in">JSON</span>.stringify(data) + <span class="string">')'</span>;</span><br><span class="line">        res.end(str);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.end();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;).listen(port,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'jsonp server is on'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
@@ -1599,16 +1599,47 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
 <p>  <code>Cache-Control</code>是<code>http1.1</code>为了弥补<code>Expires</code>的缺陷而加入的（http1.0时，使用<code>pragma</code>），当<code>Expires</code>和<code>Cache-Control</code>同时存在时，<code>Cache-Control</code>的优先级高于<code>Expires</code>。</p>
 </li>
 </ul>
-<pre><code>|选项|描述|
-|---|---|
-|public|服务器端和浏览器端都可以缓存|
-|private|只有浏览器可以缓存|
-|no-cache|强制浏览器在使用cache拷贝之前先提交一个http请求到原服务器进行确认，类似于弱缓存
-|only-if-cached|表明客户端只接受已缓存的响应，并且不需要向服务器检查是否有更新的拷贝
-|max-age=60|单位：秒，缓存的有效期，超过这个时间后将被认为过期。此选项会覆盖Expires字段的过期日期
-|no-store|不缓存，使用协商缓存
-|must-revalidate|缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源
-</code></pre><h2 id="弱缓存"><a href="#弱缓存" class="headerlink" title="弱缓存"></a>弱缓存</h2><p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Cache-Control取值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td>服务器端和浏览器端都可以缓存</td>
+</tr>
+<tr>
+<td>private</td>
+<td>只有浏览器可以缓存</td>
+</tr>
+<tr>
+<td>no-cache</td>
+<td>强制浏览器在使用cache拷贝之前先提交一个http请求到原服务器进行确认，类似于弱缓存</td>
+</tr>
+<tr>
+<td>only-if-cached</td>
+<td>表明客户端只接受已缓存的响应，并且不需要向服务器检查是否有更新的拷贝</td>
+</tr>
+<tr>
+<td>max-age=60</td>
+<td>单位：秒，缓存的有效期，超过这个时间后将被认为过期。此选项会覆盖Expires字段的过期日期</td>
+</tr>
+<tr>
+<td>no-store</td>
+<td>不缓存，使用协商缓存</td>
+</tr>
+<tr>
+<td>must-revalidate</td>
+<td>缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="弱缓存"><a href="#弱缓存" class="headerlink" title="弱缓存"></a>弱缓存</h2><p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
 <ul>
 <li><code>Last-Modified</code>和<code>Etag</code>为响应头部字段，分别对应请求头部字段中的<code>if-Modifed-Since</code>/<code>If-None-Match</code>。</li>
 </ul>
