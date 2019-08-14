@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Titanium&#39;s Blog">
 <meta property="og:description" content="HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存）  流程访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-22T05:46:24.313Z">
+<meta property="og:updated_time" content="2019-08-14T13:21:52.842Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP 强缓存vs弱缓存">
 <meta name="twitter:description" content="HTTP缓存类型 强缓存（本地缓存） 弱缓存（协商缓存）  流程访问静态资源时的流程  强缓存阶段：先在本地查找是否有该资源，若有，且Expires和Cache-Control都满足要求，则命中强缓存，返回200，直接返回强缓存中的数据，不会向服务器发出请求。 弱缓存阶段：在本地缓存找到该资源，发送http请求到服务器询问该资源是否有更新，若服务器判断没有更新，返回304Not Modified。">
@@ -413,10 +413,7 @@
 <li>缓存失败阶段：若在本地没有找到对应资源，或者资源已过期/更新，则服务器返回该资源。</li>
 </ol>
 <h2 id="强缓存VS弱缓存"><a href="#强缓存VS弱缓存" class="headerlink" title="强缓存VS弱缓存"></a>强缓存VS弱缓存</h2><ul>
-<li>状态码</li>
-</ul>
-<p>强缓存返回200<br>弱缓存返回304</p>
-<ul>
+<li>状态码<br>  强缓存返回200<br>  弱缓存返回304</li>
 <li>强缓存不需要发出http请求，而弱缓存需要。</li>
 </ul>
 <h2 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h2><p>使用<code>Expires</code>和<code>cache-control</code>来控制。优先级：<code>pragma</code>&gt;<code>cache-control</code>&gt;<code>Expires</code></p>
@@ -425,10 +422,19 @@
 <p>  服务器为资源设置一个<code>Expire</code>日期，在这<code>Expire</code>日期之前可以将资源视作最新。此字段是为了兼容旧版本HTTP才保留的，在http1.0时配合pragma使用，<code>pragma：no-cache</code>表示不缓存，<code>pragma</code>的优先级大于<code>Expires</code></p>
 </li>
 <li><p><code>Cache-Control</code></p>
-<p>  <code>Cache-Control</code>是<code>http1.1</code>为了弥补<code>Expires</code>的缺陷而加入的（http1.0时，使用<code>pragma</code>），当<code>Expires</code>和<code>Cache-Control</code>同时存在时，<code>Cache-Control</code>的优先级高于<code>Expires</code>。<br>  |选项|描述|<br>  |—-|—-|<br>  |public|服务器端和浏览器端都可以缓存|<br>  |private|只有浏览器可以缓存|<br>  |no-cache|强制浏览器在使用cache拷贝之前先提交一个http请求到原服务器进行确认，类似于弱缓存<br>  |only-if-cached|表明客户端只接受已缓存的响应，并且不需要向服务器检查是否有更新的拷贝<br>  |max-age=60|单位：秒，缓存的有效期，超过这个时间后将被认为过期。此选项会覆盖Expires字段的过期日期<br>  |no-store|不缓存，使用协商缓存<br>  |must-revalidate|缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源</p>
+<p>  <code>Cache-Control</code>是<code>http1.1</code>为了弥补<code>Expires</code>的缺陷而加入的（http1.0时，使用<code>pragma</code>），当<code>Expires</code>和<code>Cache-Control</code>同时存在时，<code>Cache-Control</code>的优先级高于<code>Expires</code>。</p>
 </li>
 </ul>
-<h2 id="弱缓存"><a href="#弱缓存" class="headerlink" title="弱缓存"></a>弱缓存</h2><p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
+<pre><code>|选项|描述|
+|---|---|
+|public|服务器端和浏览器端都可以缓存|
+|private|只有浏览器可以缓存|
+|no-cache|强制浏览器在使用cache拷贝之前先提交一个http请求到原服务器进行确认，类似于弱缓存
+|only-if-cached|表明客户端只接受已缓存的响应，并且不需要向服务器检查是否有更新的拷贝
+|max-age=60|单位：秒，缓存的有效期，超过这个时间后将被认为过期。此选项会覆盖Expires字段的过期日期
+|no-store|不缓存，使用协商缓存
+|must-revalidate|缓存必须在使用之前验证旧资源的状态，并且不可使用过期资源
+</code></pre><h2 id="弱缓存"><a href="#弱缓存" class="headerlink" title="弱缓存"></a>弱缓存</h2><p>有关字段 <code>Last-Modified</code>/<code>If-Modified-Since</code>（HTTP1.0）、<code>Etag</code>/<code>If-None-Match</code>（HTTP1.1）</p>
 <ul>
 <li><code>Last-Modified</code>和<code>Etag</code>为响应头部字段，分别对应请求头部字段中的<code>if-Modifed-Since</code>/<code>If-None-Match</code>。</li>
 </ul>
