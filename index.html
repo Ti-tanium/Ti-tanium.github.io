@@ -329,6 +329,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Design-Pattern/" itemprop="url" rel="index">
+                    <span itemprop="name">Design Pattern</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -368,7 +390,72 @@
       
         
           
-            
+            <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于<strong>创建型模式</strong>，它提供了一种创建对象的最佳方式。<br>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+<p><strong>特点</strong></p>
+<ul>
+<li>单例类仅有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例</li>
+<li>单例类的唯一实例必须由自己创建</li>
+<li>避免对共享资源的多重占用</li>
+<li>单例对象在堆上分配的内存空间只有在程序终止后才会释放（不要滥用单例）</li>
+</ul>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>需频繁实例化/销毁的对象</li>
+<li>有状态的工具类对象</li>
+<li>频繁访问数据库/文件的对象</li>
+</ul>
+<p><strong>实例</strong></p>
+<ul>
+<li>网站的计数器采用单例模式，以保证同步。</li>
+<li>windows的Recycle Bin（回收站）是典型的单例应用。</li>
+<li>应用程序的日志应用一般用单例模式实现。由于共享的日志文件一直处于打开状态，只能有一个实例去操作，否则内容不好追加。</li>
+<li>数据库连接池一般也是采用单例模式。数据库软件系统中使用数据库连接池，主要是节省打开或者关闭数据库连接所引起的效率损耗</li>
+<li>多线程的线程池一般采用单例模式</li>
+</ul>
+<h1 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h1><p>饿汉模式指的是，使用之前初始化，类加载时就完成了初始化</p>
+<p><strong>特点</strong></p>
+<ul>
+<li>类加载比较慢，会占用较多的内存</li>
+<li>基于<code>classloader</code>的机制避免了同步问题</li>
+<li>由于没有使用锁，执行效率高</li>
+</ul>
+<p>代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();  </span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> instance;  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="懒汉式-Lazy-Initialization"><a href="#懒汉式-Lazy-Initialization" class="headerlink" title="懒汉式 Lazy Initialization"></a>懒汉式 Lazy Initialization</h1><p>指的是在用的时候才实例化，即懒加载。</p>
+<p><strong>特点</strong></p>
+<ul>
+<li>需要使用锁来保证线程安全，这会牺牲效率</li>
+</ul>
+<p>代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </span><br><span class="line">        instance = <span class="keyword">new</span> Singleton();  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">return</span> instance;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="双重检查模式"><a href="#双重检查模式" class="headerlink" title="双重检查模式"></a>双重检查模式</h1><ol>
+<li>第一次检查<ul>
+<li>避免没必要的同步，如果不是<code>null</code>的话，线程不会被阻塞，直接返回单例。</li>
+<li>只有在单例是null的情况下，需要同步构建一个单例</li>
+</ul>
+</li>
+<li><p>第二次检查</p>
+<p>由于进行了同步，在第一个进入临界区的线程建立单例后，为了防止后面其他被阻塞的线程重复创建单例，因此进行第二次检查：不为<code>null</code>就直接返回。</p>
+</li>
+<li><p><code>volatile</code>保证有序性</p>
+<p>由于singleton=new Singleton()语句不具有原子性，该语句可分为三步：</p>
+<ul>
+<li>分配内存空间</li>
+<li>初始化对象</li>
+<li><p>将内存空间的地址赋给对应的引用</p>
+<p>有可能指令重排后，初始化对象放在了最后一步，而此时singleton已经不是null了，因此可能有其他的线程成功跳过了第一次检查，返回了一个没有正确初始化的实例。<br>而volatile可以禁止指令重排，保证所有线程都可以获取到正确实例化的单例对象。</p>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> Singleton singleton; <span class="comment">// volatile ensure executing order</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123; </span><br><span class="line">		<span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; <span class="comment">// first check </span></span><br><span class="line">			<span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">				 <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123; <span class="comment">// second check</span></span><br><span class="line">					singleton = <span class="keyword">new</span> Singleton(); </span><br><span class="line">				&#125; </span><br><span class="line">			&#125;</span><br><span class="line">		 &#125; </span><br><span class="line">		<span class="keyword">return</span> singleton;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="静态内部类模式"><a href="#静态内部类模式" class="headerlink" title="静态内部类模式"></a>静态内部类模式</h1><blockquote>
+<p>推荐使用</p>
+</blockquote>
+<p>可以达到与DCL同样的效果，而且实现简单。</p>
+<ul>
+<li>同步问题：利用了ClassLoader的机制避免了同步问题（classloader可以保证一个类只被加载一次）</li>
+<li>懒加载：而静态内部类只在被调用的时候，才会被加载，因而保证了懒加载</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123; </span><br><span class="line">	<span class="comment">// Holder</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123; </span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton(); </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123; </span><br><span class="line">		<span class="keyword">return</span> SingletonHolder.INSTANCE; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -547,7 +634,7 @@
 </ul>
 <h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><ul>
 <li><p>客户端</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 得到航班信息查询结果后的回调函数</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> flightHandler = <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">          alert(<span class="string">'你查询的航班结果是：票价 '</span> + data.price + <span class="string">' 元，'</span> + <span class="string">'余票 '</span> + data.tickets + <span class="string">' 张。'</span>);</span></span><br><span class="line">      &#125;;</span><br><span class="line"><span class="javascript">      <span class="comment">//把callback函数赋给window对象，供script回调   </span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">window</span>.flightHandler = flightHandler;</span></span><br><span class="line"></span><br><span class="line"><span class="javascript">      <span class="comment">// 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> url = <span class="string">"http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler"</span>;</span></span><br><span class="line">      </span><br><span class="line"><span class="javascript">      <span class="comment">// 创建script标签，设置其属性</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span></span><br><span class="line"><span class="javascript">      script.setAttribute(<span class="string">'src'</span>, url);</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 把script标签加入head，此时调用开始</span></span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>].appendChild(script); </span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line">      // 得到航班信息查询结果后的回调函数</span><br><span class="line">      var flightHandler = function(data)&#123;</span><br><span class="line">          alert('你查询的航班结果是：票价 ' + data.price + ' 元，' + '余票 ' + data.tickets + ' 张。');</span><br><span class="line">      &#125;;</span><br><span class="line">      //把callback函数赋给window对象，供script回调   </span><br><span class="line">      window.flightHandler = flightHandler;</span><br><span class="line"></span><br><span class="line">      // 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）</span><br><span class="line">      var url = "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler";</span><br><span class="line">      </span><br><span class="line">      // 创建script标签，设置其属性</span><br><span class="line">      var script = document.createElement('script');</span><br><span class="line">      script.setAttribute('src', url);</span><br><span class="line">      // 把script标签加入head，此时调用开始</span><br><span class="line">      document.getElementsByTagName('head')[0].appendChild(script); </span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>服务器</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> urllib = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> port = <span class="number">8080</span>;</span><br><span class="line"><span class="keyword">var</span> data = &#123;<span class="string">'data'</span>:<span class="string">'world'</span>&#125;;</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> params = urllib.parse(req.url,<span class="literal">true</span>);</span><br><span class="line">    <span class="keyword">if</span>(params.query.callback)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(params.query.callback);</span><br><span class="line">        <span class="comment">//jsonp</span></span><br><span class="line">        <span class="keyword">var</span> str = params.query.callback + <span class="string">'('</span> + <span class="built_in">JSON</span>.stringify(data) + <span class="string">')'</span>;</span><br><span class="line">        res.end(str);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.end();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;).listen(port,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'jsonp server is on'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
@@ -2920,7 +3007,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2931,7 +3018,7 @@ cost=\int_{0}^{\infty}(x^TQx+u^TRu)dt</script><p>$Q$和$R$代表$x$和$u$的权�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

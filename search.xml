@@ -3,7 +3,16 @@
   <entry>
     <title><![CDATA[单例模式的五种Java实现]]></title>
     <url>%2F2019%2F09%2F20%2F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BA%94%E7%A7%8DJava%E5%AE%9E%E7%8E%B0%2F</url>
-    <content type="text"><![CDATA[]]></content>
+    <content type="text"><![CDATA[定义单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。 特点 单例类仅有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例 单例类的唯一实例必须由自己创建 避免对共享资源的多重占用 单例对象在堆上分配的内存空间只有在程序终止后才会释放（不要滥用单例） 使用场景 需频繁实例化/销毁的对象 有状态的工具类对象 频繁访问数据库/文件的对象 实例 网站的计数器采用单例模式，以保证同步。 windows的Recycle Bin（回收站）是典型的单例应用。 应用程序的日志应用一般用单例模式实现。由于共享的日志文件一直处于打开状态，只能有一个实例去操作，否则内容不好追加。 数据库连接池一般也是采用单例模式。数据库软件系统中使用数据库连接池，主要是节省打开或者关闭数据库连接所引起的效率损耗 多线程的线程池一般采用单例模式 饿汉模式饿汉模式指的是，使用之前初始化，类加载时就完成了初始化 特点 类加载比较慢，会占用较多的内存 基于classloader的机制避免了同步问题 由于没有使用锁，执行效率高 代码12345678public class Singleton &#123; private static Singleton instance = new Singleton(); private Singleton ()&#123; &#125; public static Singleton getInstance() &#123; return instance; &#125; &#125; 懒汉式 Lazy Initialization指的是在用的时候才实例化，即懒加载。 特点 需要使用锁来保证线程安全，这会牺牲效率 代码12345678910public class Singleton &#123; private static Singleton instance; private Singleton ()&#123;&#125; public static synchronized Singleton getInstance() &#123; if (instance == null) &#123; instance = new Singleton(); &#125; return instance; &#125; &#125; 双重检查模式 第一次检查 避免没必要的同步，如果不是null的话，线程不会被阻塞，直接返回单例。 只有在单例是null的情况下，需要同步构建一个单例 第二次检查 由于进行了同步，在第一个进入临界区的线程建立单例后，为了防止后面其他被阻塞的线程重复创建单例，因此进行第二次检查：不为null就直接返回。 volatile保证有序性 由于singleton=new Singleton()语句不具有原子性，该语句可分为三步： 分配内存空间 初始化对象 将内存空间的地址赋给对应的引用 有可能指令重排后，初始化对象放在了最后一步，而此时singleton已经不是null了，因此可能有其他的线程成功跳过了第一次检查，返回了一个没有正确初始化的实例。而volatile可以禁止指令重排，保证所有线程都可以获取到正确实例化的单例对象。 123456789101112131415public class Singleton &#123; private volatile Singleton singleton; // volatile ensure executing order private Singleton() &#123; &#125; public static Singleton getInstance() &#123; if (singleton == null) &#123; // first check synchronized (Singleton.class) &#123; if (singleton == null) &#123; // second check singleton = new Singleton(); &#125; &#125; &#125; return singleton; &#125;&#125; 静态内部类模式 推荐使用 可以达到与DCL同样的效果，而且实现简单。 同步问题：利用了ClassLoader的机制避免了同步问题（classloader可以保证一个类只被加载一次） 懒加载：而静态内部类只在被调用的时候，才会被加载，因而保证了懒加载 123456789101112public class Singleton &#123; // Holder private static class SingletonHolder &#123; private static final Singleton INSTANCE = new Singleton(); &#125; private Singleton ()&#123;&#125; public static final Singleton getInstance() &#123; return SingletonHolder.INSTANCE; &#125;&#125;]]></content>
+      <categories>
+        <category>Design Pattern</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Design Pattern</tag>
+        <tag>Singleton Pattern</tag>
+        <tag>Thread Safe</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[JSONP简介]]></title>
@@ -14,8 +23,8 @@
         <category>Javascript</category>
       </categories>
       <tags>
-        <tag>Javascript</tag>
         <tag>Front-end</tag>
+        <tag>Javascript</tag>
       </tags>
   </entry>
   <entry>
@@ -73,8 +82,8 @@
         <category>Autonomous Driving</category>
       </categories>
       <tags>
-        <tag>Environment Setup</tag>
         <tag>Autonomous Driving</tag>
+        <tag>Environment Setup</tag>
         <tag>Baidu Apollo</tag>
         <tag>Multiple Operating System</tag>
         <tag>Ubantu</tag>
