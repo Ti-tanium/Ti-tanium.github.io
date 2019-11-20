@@ -70,7 +70,7 @@
 
 
 
-  <meta name="keywords" content="Autonomous Driving,Environment Setup,Baidu Apollo,Multiple Operating System,Ubantu,Docker,">
+  <meta name="keywords" content="Autonomous Driving,Baidu Apollo,Environment Setup,Multiple Operating System,Ubantu,Docker,">
 
 
 
@@ -82,7 +82,7 @@
 
 
 <meta name="description" content="简介此系列博客将记录如何使用百度Apollo自动驾驶开发者套件完成循迹功能。循迹指的是让车辆/机器人自己照着原来设定的路线行驶，因此首先要进行录制路线Record，然后再进行循迹Replay，以及完成简单的避障功能。 Apollo的开发者套件，也就是一辆小车，如下图所示, 拥有一个激光雷达，两个GPS天线，一个IMU，一个毫米波雷达，3个摄像头用于感知环境，小车同时配备一个遥控器用于控制小车，小车">
-<meta name="keywords" content="Autonomous Driving,Environment Setup,Baidu Apollo,Multiple Operating System,Ubantu,Docker">
+<meta name="keywords" content="Autonomous Driving,Baidu Apollo,Environment Setup,Multiple Operating System,Ubantu,Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Apollo自动驾驶平台：工控机软件系统安装教程">
 <meta property="og:url" content="https://ti-tanium.github.io/2019/07/22/Apollo自动驾驶平台：工控机软件系统安装教程/index.html">
@@ -372,6 +372,17 @@
 
           
           
+             <span id="/2019/07/22/Apollo自动驾驶平台：工控机软件系统安装教程/" class="leancloud_visitors" data-flag-title="Apollo自动驾驶平台：工控机软件系统安装教程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
           
             <span class="post-meta-divider">|</span>
@@ -466,9 +477,9 @@
           
             <a href="/tags/Autonomous-Driving/" rel="tag"># Autonomous Driving</a>
           
-            <a href="/tags/Environment-Setup/" rel="tag"># Environment Setup</a>
-          
             <a href="/tags/Baidu-Apollo/" rel="tag"># Baidu Apollo</a>
+          
+            <a href="/tags/Environment-Setup/" rel="tag"># Environment Setup</a>
           
             <a href="/tags/Multiple-Operating-System/" rel="tag"># Multiple Operating System</a>
           
@@ -588,7 +599,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -704,7 +715,7 @@
 
         
 <div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   
     <span class="site-uv">
@@ -883,6 +894,28 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'iDc5lgzFweIYzudS1luyBRTI-gzGzoHsz',
+        appKey: 'Tf57MR7FEm4n1nzQBXWG9FpG',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 
@@ -1210,6 +1243,113 @@
 
 
   
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("iDc5lgzFweIYzudS1luyBRTI-gzGzoHsz", "Tf57MR7FEm4n1nzQBXWG9FpG");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
