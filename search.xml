@@ -28,8 +28,8 @@
         <category>Javascript</category>
       </categories>
       <tags>
-        <tag>Javascript</tag>
         <tag>Front-end</tag>
+        <tag>Javascript</tag>
       </tags>
   </entry>
   <entry>
@@ -41,8 +41,8 @@
         <category>HTML/CSS</category>
       </categories>
       <tags>
-        <tag>Front-end</tag>
         <tag>CSS</tag>
+        <tag>Front-end</tag>
         <tag>Browser Rendering</tag>
         <tag>Repaint&amp;Reflow</tag>
       </tags>
@@ -87,9 +87,9 @@
         <category>Autonomous Driving</category>
       </categories>
       <tags>
+        <tag>Environment Setup</tag>
         <tag>Autonomous Driving</tag>
         <tag>Baidu Apollo</tag>
-        <tag>Environment Setup</tag>
         <tag>Multiple Operating System</tag>
         <tag>Ubantu</tag>
         <tag>Docker</tag>
@@ -118,8 +118,8 @@
         <category>HTML/CSS</category>
       </categories>
       <tags>
-        <tag>Front-end</tag>
         <tag>CSS</tag>
+        <tag>Front-end</tag>
       </tags>
   </entry>
   <entry>
